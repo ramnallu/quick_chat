@@ -26,5 +26,5 @@ RUN mkdir -p data/chroma
 # Expose the port Streamlit runs on (Hugging Face Spaces use 7860)
 EXPOSE 7860
 
-# Check if streamlit is installed and run it
-ENTRYPOINT ["streamlit", "run", "app/streamlit_app.py", "--server.port=7860", "--server.address=0.0.0.0"]
+# Check if chroma database exists, if not, ingest documents
+ENTRYPOINT ["sh", "-c", "if [ ! -d \"data/chroma\" ] || [ -z \"$(ls -A data/chroma)\" ]; then python scripts/ingest_documents.py --source-dir ./data --chroma-persist ./data/chroma; fi && streamlit run app/streamlit_app.py --server.port=7860 --server.address=0.0.0.0"]
