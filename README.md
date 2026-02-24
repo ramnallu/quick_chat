@@ -1,3 +1,13 @@
+---
+title: QuickChat
+emoji: 🤖
+colorFrom: blue
+colorTo: indigo
+sdk: docker
+pinned: false
+---
+
+
 # 🤖 QuickChat: Agentic RAG for Local Businesses
 
 [![Python](https://img.shields.io/badge/Python-3.9+-blue.svg)](https://www.python.org/)
