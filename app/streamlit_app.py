@@ -2,6 +2,12 @@ import os
 import sys
 import pathlib
 import uuid
+
+# Ensure the project root is in the python path for cloud deployments
+root_path = pathlib.Path(__file__).parent.parent.absolute()
+if str(root_path) not in sys.path:
+    sys.path.append(str(root_path))
+
 import streamlit as st
 from dotenv import load_dotenv
 
