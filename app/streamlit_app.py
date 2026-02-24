@@ -27,120 +27,127 @@ st.set_page_config(
 st.markdown("""
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-    /* Global Styles */
-    html, body, [class*="css"] {
-        font-family: 'Inter', sans-serif;
+    /* Global Styles & Variable Definitions */
+    :root {
+        --primary: #6366f1;
+        --primary-glow: rgba(99, 102, 241, 0.4);
+        --bg-glass: rgba(255, 255, 255, 0.03);
+        --border-glass: rgba(255, 255, 255, 0.1);
+        --card-bg: rgba(30, 41, 59, 0.7);
     }
 
-    /* Hide default elements */
+    html, body, [class*="css"] {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    /* Remove default Streamlit shadows and headers */
+    header[data-testid="stHeader"] { background: transparent !important; }
     footer { visibility: hidden; }
-    header { visibility: hidden; }
-    .main { padding: 0; }
     
-    /* Message styling */
-    .message-container {
-        display: flex;
-        margin-bottom: 20px;
-        animation: slideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    .main { 
+        background-color: #0f172a;
+        background-image: 
+            radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.1) 0, transparent 50%), 
+            radial-gradient(at 100% 0%, rgba(139, 92, 246, 0.1) 0, transparent 50%);
     }
-    
-    @keyframes slideIn {
-        from { opacity: 0; transform: translateY(20px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-    
-    .user-message { justify-content: flex-end; }
-    
-    .message-bubble {
-        padding: 14px 20px;
-        border-radius: 20px;
-        max-width: 75%;
-        word-wrap: break-word;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-        font-size: 15px;
-        line-height: 1.5;
-    }
-    
-    .user-bubble {
-        background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-        color: white;
-        border-bottom-right-radius: 4px;
-    }
-    
-    .assistant-bubble {
-        background-color: #f3f4f6;
-        color: #1f2937;
-        border-bottom-left-radius: 4px;
-        border: 1px solid #e5e7eb;
-    }
-    
-    /* Business header - Ribbon Style */
+
+    /* Business Header - Glassmorphism Ribbon */
     .business-header {
-        padding: 24px 30px;
-        background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-        color: white;
-        border-radius: 16px;
-        margin-bottom: 24px;
-        box-shadow: 0 4px 20px -5px rgba(0, 0, 0, 0.2);
+        padding: 40px 30px;
+        background: var(--card-bg);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid var(--border-glass);
+        border-radius: 28px;
+        margin-bottom: 32px;
+        box-shadow: 0 20px 40px -15px rgba(0,0,0,0.5);
         text-align: center;
+        animation: fadeInDown 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes fadeInDown {
+        from { opacity: 0; transform: translateY(-20px); }
+        to { opacity: 1; transform: translateY(0); }
     }
     
     .business-header h1 {
         margin: 0;
-        font-size: 28px;
-        font-weight: 700;
-        letter-spacing: -0.01em;
-        color: #ffffff; /* Solid white for maximum clarity on ribbon */
+        font-size: 34px;
+        font-weight: 800;
+        background: linear-gradient(135deg, #ffffff 0%, #94a3b8 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        letter-spacing: -0.03em;
     }
     
     .business-header p {
-        margin: 8px 0 0 0;
-        font-size: 14px;
+        margin: 14px auto 0;
+        font-size: 16px;
         font-weight: 400;
-        opacity: 0.9;
-        max-width: 800px;
-        margin-left: auto;
-        margin-right: auto;
+        color: #94a3b8;
+        max-width: 650px;
+        line-height: 1.6;
     }
     
-    /* Input area styling */
-    /* Chat Input Premium Styling */
+    /* Message Bubbles - Modern Chat UI */
+    .stChatMessage {
+        background-color: transparent !important;
+        padding: 8px 0 !important;
+    }
+
+    div[data-testid="stChatMessageContent"] {
+        background-color: rgba(30, 41, 59, 0.6) !important;
+        backdrop-filter: blur(8px);
+        border: 1px solid var(--border-glass) !important;
+        border-radius: 20px !important;
+        padding: 14px 20px !important;
+        color: #f1f5f9 !important;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        font-size: 15px;
+        line-height: 1.6;
+    }
+
+    /* User Message distinct style */
+    div[data-testid="stChatMessage"][data-testid="user"] div[data-testid="stChatMessageContent"] {
+        background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%) !important;
+        border: none !important;
+        color: #ffffff !important;
+        box-shadow: 0 10px 15px -3px var(--primary-glow);
+    }
+
+    /* Input area - Refined Dark Tray */
     div[data-testid="stChatInput"] {
-        padding-bottom: 20px !important;
+        background: transparent !important;
+        padding-bottom: 30px !important;
     }
     
     div[data-testid="stChatInput"] > div {
-        background-color: #f9fafb !important;
-        border: 1px solid #e5e7eb !important;
-        border-radius: 26px !important;
-        padding: 4px 8px !important;
+        background-color: #1e293b !important;
+        border: 1px solid #334155 !important;
+        border-radius: 24px !important;
+        padding: 8px 12px !important;
+        transition: all 0.3s ease;
     }
 
-    button[data-testid="stChatInputButton"] {
-        background-color: #111827 !important;
-        border-radius: 50% !important;
-        width: 32px !important;
-        height: 32px !important;
-        padding: 0 !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
+    textarea[data-testid="stChatInputTextArea"] {
+        color: #f8fafc !important;
+        font-size: 15px !important;
+    }
+
+    /* Buttons & Status Indicators */
+    .stButton button {
+        border-radius: 14px !important;
+        background: var(--primary) !important;
         color: white !important;
         border: none !important;
-        margin-right: 4px !important;
-    }
-    
-    button[data-testid="stChatInputButton"]:hover {
-        background-color: #374151 !important;
+        transition: all 0.2s ease;
     }
 
-    /* General Button styling */
-    .stButton button {
-        border-radius: 12px !important;
-        padding: 10px 20px !important;
-        font-weight: 500 !important;
+    .stButton button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px var(--primary-glow);
     }
 </style>
 """, unsafe_allow_html=True)
@@ -261,39 +268,6 @@ if selected_business:
             st.markdown(msg.get("text", ""))
 
 
-    # 1. Global CSS for the Pill Tray
-    st.markdown("""
-        <style>
-            div[data-testid="stChatInput"] { padding-bottom: 20px !important; }
-            div[data-testid="stChatInput"] > div {
-                border-radius: 28px !important;
-                border: 1px solid #e5e7eb !important;
-                background-color: #ffffff !important;
-                box-shadow: 0 2px 8px rgba(0,0,0,0.05) !important;
-            }
-            /* Styling for the Send/Stop button */
-            button[data-testid="stChatInputButton"] {
-                background-color: #000000 !important;
-                border-radius: 50% !important;
-                width: 32px !important;
-                height: 32px !important;
-                min-width: 32px !important;
-                border: none !important;
-                padding: 0 !important;
-                display: flex !important;
-                align-items: center !important;
-                justify-content: center !important;
-            }
-            button[data-testid="stChatInputButton"] svg { display: none !important; }
-            button[data-testid="stChatInputButton"]::after {
-                content: '↑';
-                color: white;
-                font-size: 18px;
-                font-weight: bold;
-            }
-        </style>
-    """, unsafe_allow_html=True)
-
     # --- SINGLE CHAT INPUT LOOP ---
     prompt = st.chat_input("Ask anything", key="chat_input_unique")
 
@@ -378,4 +352,3 @@ if st.session_state.get("is_generating"):
         st.session_state.chat_history.append({"role": "assistant", "text": "Stopped."})
         st.rerun()
     st.markdown('</div>', unsafe_allow_html=True)
-
