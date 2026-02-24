@@ -1,59 +1,15 @@
-#!/usr/bin/env python3
-"""
-scripts/ingest_documents.py
-
-Simple ingestion script that walks a source folder with one top-level folder per business,
-extracts text from .txt/.md/.pdf, chunks text, computes embeddings and upserts into ChromaDB
-collections named `business__{business_id}`.
-
-Usage example:
-python scripts/ingest_documents.py --source-dir ./docs --chroma-persist ./data/chroma \
-    --model sentence-transformers/all-MiniLM-L6-v2 --batch-size 256
-
-"""
 import argparse
 import hashlib
 import json
 import os
+import re
 from pathlib import Path
 from typing import List
 
-# resilient embeddings import: use LangChain helper when available, otherwise
-# fall back to a sentence-transformers wrapper
-try:
-    from langchain.embeddings import HuggingFaceEmbeddings
-except Exception:
-    try:
-        from langchain.embeddings.huggingface import HuggingFaceEmbeddings
-    except Exception:
-        try:
-            from sentence_transformers import SentenceTransformer
-
-            class HuggingFaceEmbeddings:
-                def __init__(self, model_name: str = "sentence-transformers/all-MiniLM-L6-v2"):
-                    self.model = SentenceTransformer(model_name)
-
-                def embed_documents(self, texts):
-                    embs = self.model.encode(texts, convert_to_numpy=True)
-                    return [emb.tolist() for emb in embs]
-
-                def embed_query(self, text: str):
-                    emb = self.model.encode([text], convert_to_numpy=True)[0]
-                    return emb.tolist()
-
-        except Exception:
-            raise
-
-try:
-    import chromadb
-    from chromadb.config import Settings
-except Exception:
-    raise
-
-try:
-    import PyPDF2
-except Exception:
-    PyPDF2 = None
+import chromadb
+from chromadb.config import Settings
+import PyPDF2
+from langchain_huggingface import HuggingFaceEmbeddings
 
 MANIFEST_NAME = "ingest_manifest.json"
 

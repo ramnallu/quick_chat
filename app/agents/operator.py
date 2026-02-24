@@ -1,3 +1,8 @@
+import os
+import re
+import chromadb
+from langchain_huggingface import HuggingFaceEmbeddings
+
 # --- GLOBAL SINGLETONS ---
 # These ensure models are loaded once per application instance, not once per agent.
 _GLOBAL_EMBEDDINGS = None
@@ -20,23 +25,6 @@ class OperatorAgent:
         global _GLOBAL_EMBEDDINGS
         if _GLOBAL_EMBEDDINGS is None:
             print(f"[System] Loading Embedding Model for {self.agent_id}...")
-            try:
-                from langchain.embeddings import HuggingFaceEmbeddings
-            except Exception:
-                try:
-                    from langchain.embeddings.huggingface import HuggingFaceEmbeddings
-                except Exception:
-                    from sentence_transformers import SentenceTransformer
-                    class HuggingFaceEmbeddings:
-                        def __init__(self, model_name: str = "sentence-transformers/all-MiniLM-L6-v2"):
-                            self.model = SentenceTransformer(model_name)
-                        def embed_documents(self, texts):
-                            embs = self.model.encode(texts, convert_to_numpy=True)
-                            return [emb.tolist() for emb in embs]
-                        def embed_query(self, text: str):
-                            emb = self.model.encode([text], convert_to_numpy=True)[0]
-                            return emb.tolist()
-
             _GLOBAL_EMBEDDINGS = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
         return _GLOBAL_EMBEDDINGS
 
@@ -44,7 +32,6 @@ class OperatorAgent:
         """Lazy initialization of Chroma client as a global singleton."""
         global _GLOBAL_CHROMA_CLIENT
         if _GLOBAL_CHROMA_CLIENT is None:
-            import chromadb
             try:
                 _GLOBAL_CHROMA_CLIENT = chromadb.PersistentClient(path="./data/chroma")
             except Exception:
@@ -53,7 +40,6 @@ class OperatorAgent:
 
     def _sanitize_collection_name(self, name: str) -> str:
         """Convert a business name into a valid Chroma collection name."""
-        import re
         name = re.sub(r'[^a-zA-Z0-9._-]', '_', name)
         name = name.strip('_')
         if len(name) < 3:

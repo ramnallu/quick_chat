@@ -1,9 +1,7 @@
-"""
-app/api.py
+import os
+from app.graph import app_graph, agent_router
 
-Backend orchestrator using LangGraph.
-"""
-from app.graph import app_graph
+CHROMA_PERSIST = os.environ.get("CHROMA_PERSIST_PATH", "./data/chroma")
 
 def process_query(business_id: str, user_query: str, chat_history: list = None, user_id: str = "default_user") -> dict:
     """Process a user query using LangGraph."""

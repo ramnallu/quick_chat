@@ -28,7 +28,7 @@ QuickChat acts as a virtual concierge for multiple businesses simultaneously. By
 
 ## 🏗 Architecture Diagram
 
-QuickChat uses a **LangGraph State Machine** to coordinate the flow of information between specialized agents.
+QuickChat uses a **LangGraph State Machine** to coordinate the flow of information between specialized agents. For more detailed information on the system design, components, and data flow, please refer to the [Full Architecture Document](architecture.md).
 
 ```mermaid
 graph TD
@@ -119,7 +119,15 @@ Start the Streamlit UI:
 streamlit run app/streamlit_app.py
 ```
 
+### 5. Run Tests
+Verify your installation and RAG pipeline:
+
+```bash
+python tests/smoke_test.py
+```
+
 ---
+
 
 ## ⚙️ Configuration
 

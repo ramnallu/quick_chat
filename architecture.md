@@ -2,48 +2,50 @@
 
 ## Introduction
 
-This document is a build-ready system architecture for the Customer Support AI Assistant MVP. It is written so an engineer or coding assistant can implement the end-to-end solution and deployment scripts.
+This document provides the high-level system architecture for the QuickChat AI Assistant. It serves as a reference for the multi-agent design, data flow, and technology stack used in the current implementation.
 
 ## System Overview
 
-The system provides a Streamlit UI (customer-facing) and a Python backend built with LangChain. It uses a vector database to store business documents and supports RAG for responses. Components include ingestion, routing, session/state management, agents, and model integrations.
+QuickChat is an agentic RAG (Retrieval-Augmented Generation) platform designed for multi-business customer support. It provides a Streamlit-based UI and a Python backend orchestrated by LangGraph. The system isolates knowledge by business using dedicated vector collections and uses a supervisor-operator-synthesizer pattern to ensure high-quality, contextual responses.
 
-## Technology Stack (MVP)
+## Technology Stack
 
-- Frontend: Streamlit
-- Backend: Python + LangGraph
-- Orchestration: LangGraph State Machine
-- LLM Integration: LangChain (langchain-ollama, langchain-groq)
-- Embeddings: sentence-transformers / Hugging Face embeddings via LangChain
-- Vector DB (MVP): ChromaDB (local persistence)
+- **Frontend**: Streamlit (Premium UI with custom CSS/Glassmorphism)
+- **Backend**: Python 3.10+
+- **Orchestration**: [LangGraph](https://langchain-ai.github.io/langgraph/) (State machine for agent coordination)
+- **LLM Integration**: LangChain (`langchain-ollama`, `langchain-groq`)
+- **Embeddings**: `langchain-huggingface` (`sentence-transformers/all-MiniLM-L6-v2`)
+- **Vector Database**: ChromaDB (Local persistent storage)
+- **Document Processing**: `PyPDF2` for PDF extraction
 
-Rationale: ChromaDB is chosen for MVP because it's easy to embed, can run locally or within the same host, and integrates with LangChain. For Hugging Face Spaces deployment, Chroma can be run in-process or you can use Chroma Cloud / Pinecone for persistent, multi-user access.
+## Repository Layout
 
-## Repository Layout (recommended)
+- `app/`                     # Core Application Logic
+    - `streamlit_app.py`       # Streamlit UI entry point
+    - `graph.py`               # LangGraph state machine definition
+    - `api.py`                 # Unified backend interface & orchestration
+    - `agents/`                # Specialized Agent implementations
+      - `supervisor.py`        # Query Rewriting & Context management
+      - `router.py`            # Operator pool management & caching
+      - `operator.py`          # Generic RAG retrieval logic
+      - `response_generator.py` # Natural language synthesis
+- `scripts/`                 # Tooling & Pipelines
+    - `ingest_documents.py`    # CLI for document ingestion & embedding
+    - `deploy_hf_space.sh`     # Helper script for Hugging Face Spaces
+- `tests/`                   # Quality Assurance
+    - `smoke_test.py`          # Consolidated RAG & DB health check
+- `data/`                    # Persistence Layer
+    - `chroma/`                # Local ChromaDB storage
+- `requirements.txt`         # Dependency manifest
+- `README.md`                # User guide and project overview
 
-- app/                     # streamlit app + backend integrated for MVP
-    - streamlit_app.py       # entrypoint for UI
-    - graph.py               # LangGraph workflow definition
-    - api.py                 # Graph-aware backend endpoints
-    - agents/                # Agent core logic (refactored for LangChain)
-      - __init__.py
-      - supervisor.py         # Query rewriting (Supervisor)
-      - operator.py           # RAG retrieval (Operator)
-      - response_generator.py # NL generation (Synthesizer)
-- scripts/
-   - ingest_documents.py    # offline ingestion CLI
-   - deploy_hf_space.sh     # helper for HF Spaces deployment
-- models/
-- data/
-   - chroma/                # optional local persistence path for Chroma
-- requirements.txt
-- README.md
+## Agent Workflow (LangGraph)
 
-The system uses a **LangGraph** State Machine:
+QuickChat uses a linear state machine to process user queries. This ensures that every question is refined for optimal retrieval before being answered.
 
 ```mermaid
 graph TD
-    UserQuery[User Query] --> Rewriter[Supervisor Node: Query rewriting]
+    UserQuery[User Query] --> Rewriter[Supervisor Node: Query Rewriting]
     Rewriter --> Retriever[Operator Node: RAG Retrieval]
     Retriever --> Generator[Synthesizer Node: Response Generation]
     Generator --> UserResponse[User Response]
@@ -51,235 +53,39 @@ graph TD
 
 ### Component Responsibilities
 
-**Supervisor Agent** (`supervisor.py`)
-- Validates user queries and task context
-- Coordinates task assignment
-- Ensures proper task flow through the system
+#### **Supervisor Agent** (`supervisor.py`)
+- **Query Rewriting**: Analyzes chat history to resolve pronouns (e.g., "it", "they") into specific entities from previous turns.
+- **Contextualization**: Ensures the "standalone query" contains all necessary business context for the vector search.
 
-**Router Agent** (`router.py`)
-- Implements operator pool management
-- Assigns tasks to available operators
-- Tracks operator availability
+#### **Router Agent** (`router.py`)
+- **Operator Pool**: Manages a pool of `OperatorAgent` instances.
+- **Business Context Cache**: Pre-loads and stores business summaries to "warm up" operators, reducing initial response latency.
 
-**Operator Agent** (`operator.py`) — MUST BE GENERIC
-- Retrieves relevant documents using vector similarity search
-- Returns raw documents (RAG output)
-- **IMPORTANT**: Contains NO business-specific logic
-- Works identically for any business without modification
-- Pure retrieval function: `query → similarity search → raw documents`
+#### **Operator Agent** (`operator.py`)
+- **Generic Retrieval**: Performs similarity search on ChromaDB collections based on the `business_id`.
+- **Pure RAG**: Returns raw document chunks. Notably, the Operator is **business-agnostic** and contains no hardcoded business logic.
 
-**ResponseGenerator** (`response_generator.py`) — Post-Processing Layer
-- Converts raw documents into natural, conversational responses
-- Handles date-aware queries (e.g., "is there a class today?")
-- Applies conversational tone (sounds like customer support)
-- Extracts context from retrieved documents where relevant
-- Business-agnostic: uses generic formatting rules that work for any business
+#### **Response Generator** (`response_generator.py`)
+- **Synthesis**: Converts raw chunks into natural language responses.
+- **Persona alignment**: Ensures the tone is professional and strictly adheres to the provided context.
 
-### Why This Separation?
+## Document Ingestion Pipeline
 
-- **Operator Generic**: Ensures any business can be added without code changes
-- **ResponseGenerator Separate**: Handles conversational logic, date awareness, and formatting without polluting the pure RAG agent component
-- **Clear Separation of Concerns**: Retrieval (Operator) vs. Presentation (ResponseGenerator)
+The ingestion process is decoupled from the runtime to allow for bulk processing of business documentation.
 
-## Added Component: Offline Document Ingestion
+1.  **Enumerate**: Walk the `data/` directory where each folder is treated as a unique `business_id`.
+2.  **Extract**: Parse `.pdf`, `.md`, and `.txt` files.
+3.  **Split**: Perform "Semantic Splitting" based on Markdown headers to keep related concepts together.
+4.  **Embed**: Generate vectors using `HuggingFaceEmbeddings`.
+5.  **Upsert**: Store in ChromaDB with a manifest to track file checksums (avoiding redundant processing).
 
-Purpose: Bulk-harvest business documents from a folder structure and upsert embeddings into the vector DB under per-business collections/namespaces.
+## Deployment Strategy
 
-Folder convention (input):
+The system is designed to be deployment-flexible:
 
-- docs/
-   - business_abc/
-      - brochure.pdf
-      - faq.md
-   - business_xyz/
-      - menu.pdf
-      - policies.md
+-   **Hugging Face Spaces**: Optimized for Streamlit Spaces.
+-   **Local Execution**: Supports **Ollama** for 100% private, on-device operation.
+-   **Cloud Scale**: Easily switch to **Groq** for high-throughput inference or **Pinecone** for distributed vector storage by updating environment variables.
 
-Script: `scripts/ingest_documents.py`
-
-Behavior (build-ready):
-
-- Walk the `--source-dir` and treat each top-level folder as one business id.
-- For each business folder:
-   - Load documents (PDF, txt, md). Use `unstructured` or `pdfplumber` as needed.
-   - Normalize text and run LangChain `TextSplitter` to chunk documents.
-   - Calculate embeddings using `HuggingFaceEmbeddings` or `SentenceTransformers` via LangChain.
-   - Upsert vectors into Chroma under a collection named `business__{business_id}` or using `metadata:{business_id}`.
-   - Track/update a lightweight manifest (JSON) with last-harvest timestamps so re-runs only update changed files.
-
-CLI example:
-
-```
-python scripts/ingest_documents.py \
-   --source-dir ./docs \
-   --chroma-persist ./data/chroma \
-   --model sentence-transformers/all-MiniLM-L6-v2 \
-   --batch-size 256
-```
-
-Script outline (pseudo):
-
-```py
-# scripts/ingest_documents.py (outline)
-from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.embeddings import HuggingFaceEmbeddings
-import chromadb
-
-def ingest_folder(source_dir, chroma_persist, model_name, ...):
-      client = chromadb.PersistentClient(path=chroma_persist)
-      embeddings = HuggingFaceEmbeddings(model_name=model_name)
-      for business_dir in list_top_level_dirs(source_dir):
-            docs = load_docs_from_dir(business_dir)
-            chunks = split_docs(docs)
-            vectors = embeddings.embed_documents([c.page_content for c in chunks])
-            collection_name = f"business__{business_id}"
-            col = client.get_or_create_collection(collection_name)
-            col.add(documents=[c.page_content...], embeddings=vectors, metadatas=[...])
-
-if __name__ == '__main__':
-      # parse args and call ingest_folder
-
-```
-
-Notes:
-- Use a manifest (JSON) that stores file checksums and last indexed time to avoid re-ingesting unchanged files.
-- Keep embedding model configurable; choose `all-MiniLM-L6-v2` for cost/perf tradeoff in MVP.
-
-Mermaid: Document ingestion flow
-
-```mermaid
-sequenceDiagram
-   participant IngestCLI
-   participant FS as FileSystem/docs
-   participant Splitter
-   participant Embed as EmbeddingModel
-   participant Chroma as ChromaDB
-
-   IngestCLI->>FS: enumerate business folders
-   FS->>IngestCLI: file lists
-   IngestCLI->>Splitter: load & split docs
-   Splitter->>Embed: send chunks
-   Embed->>Chroma: upsert vectors (per-business collection)
-   Chroma-->>IngestCLI: ack
-```
-
-## Integration Points (added)
-
-- Ingestion script writes to the same Chroma collections used at runtime by the API/agents.
-- The Supervisor/Router should reference collections by `business_id` when constructing retrieval chains.
-
-## Deployment: Hugging Face Spaces (detailed)
-
-Two deployment options for MVP on Hugging Face:
-
-1) Single Space (Streamlit-only with integrated backend)
-    - Use a Streamlit Space. Keep the backend logic inside the same process (e.g., `api.py` called from `streamlit_app.py`).
-    - Benefits: easiest, single repo push to HF Spaces.
-    - Limitations: resource limits, not ideal for persistent, multi-user Chroma.
-
-2) Hybrid (Space UI + external vector DB / hosted backend)
-    - Deploy UI to HF Spaces (Streamlit) and run a small backend on a cloud VM or container (or use Chroma Cloud / Pinecone) exposing REST endpoints.
-    - Benefits: scalable, persistent storage, suitable for multi-user production.
-
-Steps to deploy a Streamlit app to HF Spaces (Option 1):
-
-- Prepare repository with `streamlit_app.py` at root or inside `app/` and `requirements.txt` listing `streamlit`, `langchain`, `chromadb`, `sentence-transformers`, `transformers`, etc.
-- Add `app/streamlit_app.py` that imports `api.py` and calls orchestration functions.
-- If using Chroma local persistence, set `CHROMA_PERSIST_PATH` to `./data/chroma` (this is persisted in the Space filesystem between builds but subject to Space quotas).
-```mermaid
-graph LR
-   %% Option A: Single HF Space (MVP - everything runs in-process)
-   subgraph OptionA
-      UI1["Streamlit UI + in-process backend"]
-      ChromaLocal["data/chroma (local persistence)"]
-      ModelLocal["Local HF Model"]
-   end
-
-   %% Option B: Hybrid (recommended for multi-user / production)
-   subgraph OptionB
-      UI2["Streamlit UI (HF Space)"]
-      Backend["Backend API (FastAPI) - hosted"]
-      ChromaHosted["Chroma Cloud / Pinecone"]
-      ModelHF["Hugging Face Inference API"]
-   end
-
-   %% Flows for Option A
-   UI1 -->|in-process retrieval| ChromaLocal
-   UI1 -->|in-process inference| ModelLocal
-
-   %% Flows for Option B
-   UI2 -->|REST -> Backend| Backend
-   Backend -->|query / retrieve| ChromaHosted
-   Backend -->|inference call| ModelHF
-   UI2 -->|optional direct inference via HF APIs| ModelHF
-
-   %% Note node
-   Note["Note: Option A is simplest for MVP; Option B recommended for scale"]
-   Note --> UI1
-   Note --> UI2
-
-```
-
-2. To deploy to HF Spaces (quick MVP):
-    - Create Space (Streamlit).
-    - Push repo to Space using `scripts/deploy_hf_space.sh` or manual git.
-    - Configure secrets in Space settings if using hosted Chroma or external APIs.
-
-3. For production-ready persistence (recommended):
-    - Move to hosted vector DB (Pinecone/Weaviate/Chroma Cloud).
-    - Run backend as a small FastAPI service behind a container; UI remains in Spaces or as separate frontend.
-
-## Deployment Architecture Diagram
-
-```mermaid
-graph LR
-   %% Option A: Single HF Space (MVP - everything runs in-process)
-   subgraph OptionA["Single HF Space (MVP)"]
-      UI1["Streamlit UI + in-process backend"]
-      ChromaLocal["data/chroma (local persistence)"]
-      ModelLocal["(Local HF Model)"]
-   end
-
-   %% Option B: Hybrid (recommended for multi-user / production)
-   subgraph OptionB["Hybrid - UI in HF Space, backend & DB hosted"]
-      UI2["Streamlit UI (HF Space)"]
-      Backend["Backend API (FastAPI) - hosted"]
-      ChromaHosted["(Chroma Cloud / Pinecone)"]
-      ModelHF["(Hugging Face Inference API)"]
-   end
-
-   %% Flows for Option A
-   UI1 -->|in-process retrieval| ChromaLocal
-   UI1 -->|in-process inference| ModelLocal
-
-   %% Flows for Option B
-   UI2 -->|REST -> Backend| Backend
-   Backend -->|query / retrieve| ChromaHosted
-   Backend -->|inference call| ModelHF
-   UI2 -->|optional direct inference via HF APIs| ModelHF
-
-   %% Notes
-   classDef note fill:#f9f9f9,stroke:#333,stroke-width:1px;
-   Note(["Note: Option A is simplest for MVP; Option B recommended for scale"]):::note
-   Note --> OptionA
-   Note --> OptionB
-
-```
-
-## Build-Ready Artifacts to Include in Repo
-
-- `scripts/ingest_documents.py` (CLI) — required
-- `app/streamlit_app.py` — UI entry point
-- `app/api.py` — orchestrator, Supervisor/Router stubs
-- `requirements.txt` — pinned deps
-- `scripts/deploy_hf_space.sh` — helper push script
-- `README.md` — developer quickstart (ingest → run → deploy)
-
-## Final Notes and Recommendations
-
-- For MVP keep everything in a single repo and prefer Chroma local for cost reasons.
-- For deployment to Hugging Face Spaces, consider resource limits — if you need persistence, use a hosted vector DB and store secrets in Space settings.
-- Use `sentence-transformers/all-MiniLM-L6-v2` for embeddings in the MVP for good cost/perf.
-- Add automated tests for ingestion (checksums), retrieval (k-NN smoke tests), and end-to-end with a small dataset.
-
-If you want, I can also scaffold `scripts/ingest_documents.py`, `requirements.txt`, and a basic `streamlit_app.py` next. 
+---
+*Last Updated: 2026-02-24*

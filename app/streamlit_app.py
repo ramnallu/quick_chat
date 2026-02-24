@@ -1,19 +1,13 @@
 import os
 import sys
 import pathlib
+import uuid
 import streamlit as st
 from dotenv import load_dotenv
 
-# Load environment variables from .env
-load_dotenv()
-
-# Ensure repo root is on sys.path so `from app.api import ...` works when Streamlit
-# runs the script directly (Streamlit executes the file as __main__).
-ROOT = pathlib.Path(__file__).resolve().parents[1]
-if str(ROOT) not in sys.path:
-    sys.path.insert(0, str(ROOT))
-
-from app.api import process_query
+import chromadb
+from app.api import process_query, warmup_business_cache
+from app.graph import agent_router
 
 CHROMA_PERSIST = os.environ.get("CHROMA_PERSIST_PATH", "./data/chroma")
 
@@ -149,7 +143,6 @@ st.markdown("""
 def list_businesses(chroma_persist_path: str):
     """List available businesses from Chroma collections."""
     try:
-        import chromadb
         client = chromadb.PersistentClient(path=chroma_persist_path)
         collections = client.list_collections()
         items = []
@@ -169,7 +162,6 @@ businesses = list_businesses(CHROMA_PERSIST)
 # Global App Warmup - Happens only once per server start
 @st.cache_resource
 def perform_global_warmup(biz_list):
-    from app.api import warmup_business_cache
     warmup_business_cache(biz_list)
     return True
 
@@ -191,7 +183,6 @@ if "business_description" not in st.session_state:
 if "is_generating" not in st.session_state:
     st.session_state.is_generating = False
 if "user_id" not in st.session_state:
-    import uuid
     st.session_state.user_id = str(uuid.uuid4())[:8]
 
 # Sidebar business selector
@@ -217,8 +208,6 @@ else:
 
 # Fetch business description dynamically using RAG if not already loaded in session
 if selected_business and not st.session_state.business_description:
-    from app.graph import agent_router
-    
     # 1. Check Global Router Cache First (Instant)
     cached_context = agent_router.business_context_cache.get(selected_business)
     
