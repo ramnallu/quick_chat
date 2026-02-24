@@ -1,51 +1,139 @@
-# Local Business Support - MVP
+# 🤖 QuickChat: Agentic RAG for Local Businesses
 
-Quickstart for the MVP (Streamlit UI + LangChain + Chroma ingestion).
+[![Python](https://img.shields.io/badge/Python-3.9+-blue.svg)](https://www.python.org/)
+[![LangChain](https://img.shields.io/badge/Orchestration-LangGraph-orange.svg)](https://langchain-ai.github.io/langgraph/)
+[![Streamlit](https://img.shields.io/badge/Frontend-Streamlit-FF4B4B.svg)](https://streamlit.io/)
+[![Chroma](https://img.shields.io/badge/VectorDB-ChromaDB-green.svg)](https://www.trychroma.com/)
 
-Requirements
+**QuickChat** is a state-of-the-art, agentic RAG (Retrieval-Augmented Generation) system designed to provide intelligent customer support for local small businesses. It leverages multi-agent orchestration to transform raw business documentation into professional, context-aware conversations.
+
+---
+
+## 🌟 What the Project Does?
+
+QuickChat acts as a virtual concierge for multiple businesses simultaneously. By simply pointing the system to a folder of documents (PDFs, Markdown, Text), it:
+1.  **Ingests & Indexes**: Automatically processes documents into a high-dimensional vector space.
+2.  **Understands Context**: Uses a **Supervisor Agent** to rewrite user queries for better retrieval.
+3.  **Retrieves Precisely**: Employs an **Operator Agent** to find the exact information needed from the business-specific knowledge base.
+4.  **Generates Professionally**: Synthesizes responses that sound like experienced customer support, handling date-aware queries and specific business nuances.
+
+## 🚀 Why This Project is Useful?
+
+-   **Scalable Support**: One system can manage hundreds of businesses, each with its own isolated knowledge base.
+-   **Local First**: Optimized for privacy and cost, supporting **Ollama** for 100% on-device execution.
+-   **High Performance**: Integrates **Groq** for lightning-fast responses using cloud-scale LLMs when needed.
+-   **Customizable**: Easily adaptable to any industry—from a local café's menu to a technical FAQ for a SaaS startup.
+
+---
+
+## 🏗 Architecture Diagram
+
+QuickChat uses a **LangGraph State Machine** to coordinate the flow of information between specialized agents.
+
+```mermaid
+graph TD
+    User([User Query]) --> Supervisor[Supervisor Agent: Query Rewriting]
+    Supervisor --> Router{Router: Load Balancer}
+    Router --> Operator[Operator Agent: Vector Retrieval]
+    Operator --> Synthesizer[Synthesizer: Response Generation]
+    Synthesizer --> Output([Conversational Response])
+
+    subgraph Knowledge Base
+        Docs[Business Documents] --> Ingester[Ingestion CLI]
+        Ingester --> DB[(ChromaDB: Per-Business Collections)]
+    end
+
+    DB -.-> Operator
 ```
-python -m venv .venv
-.\.venv\Scripts\activate    # Windows
-source .venv/bin/activate    # Linux/Mac
-pip install -r requirements.txt
-pip install langgraph langchain-ollama langchain-groq
-```
 
-Ingest documents (example):
-```
-Remove-Item -Path ".\data\chroma" -Recurse -Force 2>$null; .\.venv\Scripts\python.exe scripts/ingest_documents.py --source-dir ./data --chroma-persist ./data/chroma --model sentence-transformers/all-MiniLM-L6-v2
-```
+### Core Components
+-   **Supervisor Node**: Rewrites queries to optimize them for vector search (Query Expansion).
+-   **Operator Node**: Performs similarity search on ChromaDB collections.
+-   **Synthesizer Node**: Uses the retrieved context + LLM to generate the final response.
+-   **Ingestion Pipeline**: A CLI tool that processes raw files into embeddings using `sentence-transformers`.
 
-Run Streamlit app:
-```
-taskkill /f /im streamlit.exe 2>$null; .\.venv\Scripts\python.exe -m streamlit run app/streamlit_app.py
-```
+---
 
-## Configuration (Ollama)
+## 🛠 Technology Stack
 
-The system uses **LangGraph** for orchestration and **LangChain** for LLM integration, supporting both **Ollama** (local) and **Groq** (cloud).
+-   **LLM Orchestration**: [LangGraph](https://langchain-ai.github.io/langgraph/) (Advanced state-machine based agents)
+-   **Framework**: [LangChain](https://www.langchain.com/)
+-   **LLM Providers**: [Ollama](https://ollama.com/) (Local), [Groq](https://groq.com/) (Cloud)
+-   **Vector Database**: [ChromaDB](https://www.trychroma.com/)
+-   **Embeddings**: `sentence-transformers/all-MiniLM-L6-v2`
+-   **UI Framework**: [Streamlit](https://streamlit.io/) with custom CSS/Glassmorphism.
+-   **Language**: Python 3.10+
 
-### Local Testing Customization
-You can customize the LLM connection using environment variables:
+---
 
-- `LLM_PROVIDER`: choice of `ollama` or `groq` (default: `ollama`)
-- `OLLAMA_URL`: The API endpoint (default: `http://localhost:11434`)
-- `OLLAMA_MODEL`: The model name to use (default: `qwen2.5-coder:7b`)
-- `GROQ_API_KEY`: Required if using Groq
-- `GROQ_MODEL`: Groq model name (default: `llama-3.3-70b-versatile`)
+## 🏁 Getting Started
 
-Example for Windows PowerShell:
+Follow these steps to set up QuickChat on your local machine.
+
+### 1. Prerequisites
+-   **Python 3.10+** installed.
+-   **Ollama** (optional, for local LLM usage). [Download here](https://ollama.com/).
+
+### 2. Installation
+
+#### For Windows (PowerShell)
 ```powershell
-$env:LLM_PROVIDER="groq"
-$env:GROQ_API_KEY="your_key_here"
-.\.venv\Scripts\python.exe -m streamlit run app/streamlit_app.py
+# Clone the repository
+git clone https://github.com/your-username/quick_chat.git
+cd quick_chat
+
+# Create and activate virtual environment
+python -m venv .venv
+.\.venv\Scripts\activate
+
+# Install dependencies
+pip install -r requirements.txt
 ```
 
-## Deployment to Hugging Face Spaces
+#### For Linux / macOS
+```bash
+# Clone the repository
+git clone https://github.com/your-username/quick_chat.git
+cd quick_chat
 
-1. Create a new Space (Streamlit) under your HF account.
-2. Push this repo to the Space remote (see `scripts/deploy_hf_space.sh`).
+# Create and activate virtual environment
+python3 -m venv .venv
+source .venv/bin/activate
 
-## Notes
-- For multi-user or production, consider using hosted vector DB (Pinecone, Chroma Cloud) and running backend separately.
-- Update `CHROMA_PERSIST_PATH`, `EMBEDDING_MODEL`, `OLLAMA_URL`, and `OLLAMA_MODEL` via environment variables as needed.
+# Install dependencies
+pip install -r requirements.txt
+```
+
+### 3. Ingest Data
+Place your business documents in `data/` (organized by folders) and run:
+
+```bash
+# Windows & Linux
+python scripts/ingest_documents.py --source-dir ./data --chroma-persist ./data/chroma
+```
+
+### 4. Run the Application
+Start the Streamlit UI:
+
+```bash
+streamlit run app/streamlit_app.py
+```
+
+---
+
+## ⚙️ Configuration
+
+Configure the system via environment variables or a `.env` file:
+
+| Variable | Description | Default |
+| :--- | :--- | :--- |
+| `LLM_PROVIDER` | Choose `ollama` or `groq` | `ollama` |
+| `GROQ_API_KEY` | Required if using Groq | - |
+| `OLLAMA_MODEL` | Local model name | `qwen2.5-coder:7b` |
+| `CHROMA_PERSIST_PATH` | Path to vector database | `./data/chroma` |
+
+---
+
+## 👤 Author
+**[Your Name]** - *AI Engineer & Agent Enthusiast*
+Showcasing skills in Multi-Agent Systems, RAG, and Scalable AI Orchestration.
