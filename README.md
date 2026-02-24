@@ -135,5 +135,9 @@ Configure the system via environment variables or a `.env` file:
 ---
 
 ## 👤 Author
-**[Your Name]** - *AI Engineer & Agent Enthusiast*
+**Ram Pradeep Nalluri** - *Data Engineer & AI Engineer | Agent Enthusiast*
+
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Profile-blue?style=flat&logo=linkedin)](https://www.linkedin.com/in/ramnalluri/)
+
 Showcasing skills in Multi-Agent Systems, RAG, and Scalable AI Orchestration.
+
