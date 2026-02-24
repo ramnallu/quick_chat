@@ -4,6 +4,9 @@ FROM python:3.10-slim
 # Set the working directory in the container
 WORKDIR /app
 
+# Set PYTHONPATH to ensure 'app' module is found
+ENV PYTHONPATH=/app
+
 # Install system dependencies (needed for some Python packages)
 RUN apt-get update && apt-get install -y \
     build-essential \
