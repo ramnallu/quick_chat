@@ -23,5 +23,15 @@
         "business_id": "Sawan Indian Cuisine",
         "question": "What are the chicken starters you serve?",
         "ground_truth": "The chicken starters served at Sawan Indian Cuisine include: Andhra Style Chicken Vepudu ($16.99), Chicken 65 ($15.99), Chicken 555 ($16.99), Chicken Pakora ($15.99), Chilli Chicken / Chicken Manchurian ($15.99), and Karivepaku Chicken ($15.99). Goat and Shrimp items are not part of the chicken starter selection."
+    },
+    {
+        "business_id": "Sawan Indian Cuisine",
+        "question": "what is masala?",
+        "ground_truth": "Masala refers to a blend of spices used in cooking, particularly in Indian cuisine, often including ingredients like cumin, coriander, turmeric, and cardamom."
+    },
+    {
+        "business_id": "Sawan Indian Cuisine",
+        "question": "what is Andhra?",
+        "ground_truth": "Andhra style refers to the regional cuisine from the state of Andhra Pradesh in South India, known for its bold, spicy, and tangy flavors, often featuring signature dishes like Andhra Vepudu."
     }
 ]
