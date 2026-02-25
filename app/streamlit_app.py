@@ -123,19 +123,28 @@ st.markdown("""
         padding-bottom: 30px !important;
     }
     
+    /* The outer container of the input */
     div[data-testid="stChatInput"] > div {
         background-color: #1e293b !important;
         border: 1px solid #334155 !important;
         border-radius: 24px !important;
-        padding: 8px 12px !important;
+        padding: 4px 12px !important;
         transition: all 0.3s ease;
     }
 
+    /* The actual textarea where the user types */
     textarea[data-testid="stChatInputTextArea"] {
         color: #ffffff !important;
         background-color: transparent !important;
         font-size: 15px !important;
         caret-color: #6366f1 !important;
+        -webkit-text-fill-color: #ffffff !important; /* Force for Safari/Chrome */
+    }
+
+    /* Placeholder Visibility */
+    textarea[data-testid="stChatInputTextArea"]::placeholder {
+        color: rgba(255, 255, 255, 0.4) !important;
+        -webkit-text-fill-color: rgba(255, 255, 255, 0.4) !important;
     }
 
     /* Fixed visibility for selectboxes and other standard inputs */
