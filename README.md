@@ -59,8 +59,24 @@ graph TD
 ### Core Components
 -   **Supervisor Node**: Rewrites queries to optimize them for vector search (Query Expansion).
 -   **Operator Node**: Performs similarity search on ChromaDB collections.
+-   **Knowledge Manager**: An offline agent that generates auto-glossaries for businesses and learns from unanswered queries to create new "Learning Insights" (FAQs).
 -   **Synthesizer Node**: Uses the retrieved context + LLM to generate the final response.
--   **Ingestion Pipeline**: A CLI tool that processes raw files into embeddings using `sentence-transformers`.
+-   **Ingestion Pipeline**: A CLI tool that processes raw files into embeddings with built-in **Auto-Glossary** generation.
+
+---
+
+## 📈 Self-Improvement Loop
+
+QuickChat features a continuous feedback loop to ensure its knowledge grows with user interactions.
+
+1.  **Logging**: Every query the system cannot answer is logged to `data/unanswered_queries.json`.
+2.  **Teacher-Agent**: A specialized agent analyzes these logs to draft missing information.
+3.  **Tuning**: Run the tune script to transform these gaps into indexed "Learning Insights".
+
+```bash
+# Process failed queries and update the knowledge base
+python scripts/tune_knowledge.py
+```
 
 ---
 
@@ -137,12 +153,21 @@ python tests/smoke_test.py
 ```
 
 ### 📊 6. Run Evaluations
+### 📊 6. Run Evaluations
 Measure the quality of your RAG responses using an LLM-as-a-judge:
 
 ```bash
 python tests/eval_runner.py --name "baseline_run"
 ```
-This script runs a set of test queries, compares them against ground truth, and scores them on **Accuracy**, **Faithfulness**, and **Tone**. Detailed results are saved in `tests/eval_runs/` and a summary history is kept in `tests/eval_history.json`.
+Detailed results are saved in `tests/eval_runs/`.
+
+### 🧠 7. Tune & Improve Knowledge
+Convert unanswered queries into new knowledge automatically:
+
+```bash
+python scripts/tune_knowledge.py
+```
+This script uses the **Teacher Agent** to analyze gaps and inject new "Learning Insights" back into the vector database.
 
 ---
 

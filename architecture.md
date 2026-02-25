@@ -29,9 +29,13 @@ QuickChat is an agentic RAG (Retrieval-Augmented Generation) platform designed f
       - `router.py`            # Operator pool management & caching
       - `operator.py`          # Generic RAG retrieval logic
       - `response_generator.py` # Natural language synthesis
+      - `knowledge_manager.py`  # Auto-Glossary & Teacher-Agent logic
 - `scripts/`                 # Tooling & Pipelines
-    - `ingest_documents.py`    # CLI for document ingestion & embedding
+    - `ingest_documents.py`    # CLI for document ingestion with Auto-Glossary
+    - `tune_knowledge.py`      # Feedback loop: Learn from unanswered queries
     - `deploy_hf_space.sh`     # Helper script for Hugging Face Spaces
+- `app/utils/`               # Utilities
+    - `logger.py`              # Unanswered query persistence
 - `tests/`                   # Quality Assurance
     - `smoke_test.py`          # Consolidated RAG & DB health check
 - `data/`                    # Persistence Layer
@@ -67,7 +71,11 @@ graph TD
 
 #### **Response Generator** (`response_generator.py`)
 - **Synthesis**: Converts raw chunks into natural language responses.
-- **Persona alignment**: Ensures the tone is professional and strictly adheres to the provided context.
+- **Context Awareness**: Recognizes different context types (`[Glossary]`, `[Learning Insights]`) to provide expert definitions and system-updated information with high authority.
+
+#### **Knowledge Manager** (`knowledge_manager.py`)
+- **Auto-Glossary**: During ingestion, identifies and defines specialized terminology from the raw business documents.
+- **Teacher persona**: Analyzes the `unanswered_queries.json` log to synthesize new FAQ-style knowledge (Learning Insights) based on real user gaps.
 
 ## Document Ingestion Pipeline
 

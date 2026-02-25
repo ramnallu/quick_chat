@@ -17,9 +17,12 @@ class ResponseGenerator:
             model = os.environ.get("OLLAMA_MODEL", "qwen2.5-coder:7b")
             self.llm = OllamaLLM(base_url=url, model=model, temperature=0.0)
 
-    def generate(self, query: str, raw_documents: str, chat_history: list = None) -> str:
+    def generate(self, query: str, raw_documents: str, chat_history: list = None, business_id: str = "unknown") -> str:
         """Synthesize a natural, conversational response."""
+        from app.utils.logger import log_unanswered_query
+        
         if not raw_documents or not raw_documents.strip():
+            log_unanswered_query(business_id, query, reason="no_context_found")
             return "I couldn't find information to answer that question. Could you rephrase or try another question?"
 
         if chat_history is None:
@@ -34,19 +37,22 @@ class ResponseGenerator:
 
         system_prompt = (
             "### INSTRUCTION ###\n"
-            "You are a strict Customer Support Assistant for a local business. "
-            "Your ONLY source of truth is the 'Context from business documents'.\n\n"
+            "You are a helpful Customer Support Assistant for a local business. "
+            "Your main source of truth is the 'Context from business documents'.\n\n"
+            "### CONTEXT TYPES ###\n"
+            "1. [Glossary]: Authoritative definitions of business-specific terminology or regional concepts.\n"
+            "2. [Learning Insights]: Recent updates or frequently asked questions that were specifically teacher-approved.\n"
+            "3. [General Document/Section]: Standard business information.\n\n"
             "### GUIDELINES ###\n"
-            "1. PRIORITIZE specific names, prices, and terminology from the context.\n"
-            "2. DO NOT generalize or guess. If it's not in the context, say you don't know.\n"
+            "1. PRIORITIZE information labeled as [Glossary] or [Learning Insights] for definitions and edge cases.\n"
+            "2. DO NOT generalize or guess if info is missing. However, you MUST use [Glossary] entries to explain terms to the customer.\n"
             "3. VERTICAL LISTS: When listing multiple items, you MUST use a vertical markdown list (1., 2., 3.).\n"
             "4. SPACING: Use double newlines between numbered points. DO NOT write items as a single paragraph.\n"
             "5. BOLDING: Bold the names of products or services using **double asterisks**.\n"
-            "6. PRICES: You MUST include the price of every item mentioned if it is available in the context.\n"
-            "7. PRECISION: Include specific details like full addresses, exact opening hours, and phone numbers if they are present in the context.\n"
-            "8. STRICT SUBJECT MATCHING: If the user asks for a specific subject (e.g., 'chicken', 'vegan', '24/7'), DO NOT list items that do not match that exact subject. "
-            "For example, if asked for 'chicken starters', EXCLUDE Goat, Lamb, or Shrimp even if they are in the same 'Non-Vegetarian' section.\n"
-            "9. COMPLETENESS: When listing products or services, you MUST include EVERY relevant item found in the context that matches the user's request. DO NOT skip valid entries.\n\n"
+            "6. PRICES: Include the price of every item mentioned if it is available in the context.\n"
+            "7. PRECISION: Include specific details like addresses and opening hours if they are present.\n"
+            "8. STRICT SUBJECT MATCHING: If the user asks for a specific subject, DO NOT list irrelevant items.\n"
+            "9. COMPLETENESS: Include EVERY relevant item found in the context for list requests.\n\n"
             "### CONVERSATION HISTORY ###\n"
             f"{history_text}\n"
             "### CONTEXT FROM BUSINESS DOCUMENTS ###\n"
@@ -57,11 +63,22 @@ class ResponseGenerator:
 
         try:
             response = self.llm.invoke(system_prompt)
+            answer = ""
             if hasattr(response, "content"):
-                return response.content.strip()
-            return str(response).strip()
+                answer = response.content.strip()
+            else:
+                answer = str(response).strip()
+
+            # Check if LLM explicitly said it doesn't know
+            refusal_keywords = ["don't know", "do not know", "not in the context", "no information", "cannot find", "sorry, i don't"]
+            if any(kw in answer.lower() for kw in refusal_keywords):
+                log_unanswered_query(business_id, query, reason="llm_refusal")
+
+            return answer
+
         except Exception as e:
             print(f"[ERROR] Response generation failed: {e}")
+            log_unanswered_query(business_id, query, reason=f"error: {str(e)}")
             return self._fallback_format(raw_documents)
 
     def _fallback_format(self, content: str) -> str:

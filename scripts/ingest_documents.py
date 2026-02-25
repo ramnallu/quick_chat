@@ -169,6 +169,8 @@ def ingest_folder(source_dir: Path, chroma_persist: Path, model_name: str, batch
             client = chromadb.Client()
 
     embeddings = HuggingFaceEmbeddings(model_name=model_name)
+    from app.agents.knowledge_manager import KnowledgeManagerAgent
+    km_agent = KnowledgeManagerAgent()
 
     manifest = ensure_manifest(chroma_persist)
 
@@ -178,6 +180,19 @@ def ingest_folder(source_dir: Path, chroma_persist: Path, model_name: str, batch
         print(f"Ingesting business: {business_id} (collection: {collection_name})")
         docs = load_docs_from_dir(business_dir)
         to_index = []
+
+        # --- AUTO-GLOSSARY GENERATION ---
+        # We concatenate all text to give the agent full context
+        combined_text = "\n\n".join([d["text"] for d in docs])
+        glossary_sections = km_agent.generate_glossary(business_id, combined_text)
+        
+        # Add glossary sections to the end of the doc list
+        for g_sec in glossary_sections:
+            to_index.append({
+                "id": f"{business_id}::auto_glossary::{g_sec['id']}",
+                "text": g_sec["text"],
+                "metadata": g_sec["metadata"]
+            })
 
         # Group docs by file path to check manifest once per file
         docs_by_file = {}

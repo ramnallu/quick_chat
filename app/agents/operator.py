@@ -130,11 +130,12 @@ class OperatorAgent:
         sorted_docs = sorted(retrieved_docs, key=lambda x: x.get("distance", 1.0))
 
         # Combine all retrieved documents into a single context string
-        # This gives the LLM the maximum amount of information to work with.
         combined_context = []
         for i, doc in enumerate(sorted_docs):
             content = doc["content"].strip()
             if content:
-                combined_context.append(f"[Document {i+1}]:\n{content}")
+                # Use metadata to give the LLM better clues about the source
+                section = doc.get("metadata", {}).get("section", f"Document {i+1}")
+                combined_context.append(f"[{section}]:\n{content}")
 
         return "\n\n---\n\n".join(combined_context)

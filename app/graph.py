@@ -46,7 +46,12 @@ def retrieve_node(state: AgentState):
 def generate_node(state: AgentState):
     """Generate the final response."""
     rg = ResponseGenerator()
-    answer = rg.generate(state["query"], state["context"], state["chat_history"])
+    answer = rg.generate(
+        state["query"], 
+        state["context"], 
+        state["chat_history"],
+        business_id=state["business_id"]
+    )
     return {"answer": answer}
 
 def create_graph():
