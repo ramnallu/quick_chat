@@ -87,7 +87,7 @@ st.markdown("""
     /* Target the sticky header row - simplified */
     div[data-testid="stVerticalBlock"] > div:has(> [data-testid="stHorizontalBlock"]) {
         background: #0f172a !important;
-        border: 1px solid #334155 !important;
+        border: 1px solid #475569 !important;
         border-radius: 12px !important;
         padding: 10px 20px !important;
         margin-bottom: 20px !important;
@@ -96,7 +96,7 @@ st.markdown("""
     /* Unified Chat Board - Single Border for all messages */
     div[data-testid="stVerticalBlockBorderWrapper"] {
         background-color: #0f172a !important;
-        border: 1px solid #334155 !important;
+        border: 1px solid #475569 !important;
         border-radius: 15px !important;
         padding: 10px !important;
         margin-bottom: 10px !important;
@@ -145,8 +145,19 @@ st.markdown("""
 
     [data-testid="stChatInput"] > div {
         background-color: #0f172a !important;
-        border: 1px solid #334155 !important;
+        border: 1px solid #475569 !important;
         border-radius: 12px !important;
+    }
+
+    [data-testid="stChatInput"] textarea {
+        color: #ffffff !important;
+        -webkit-text-fill-color: #ffffff !important;
+    }
+
+    [data-testid="stChatInput"] textarea::placeholder {
+        color: #475569 !important;
+        -webkit-text-fill-color: #475569 !important;
+        opacity: 1 !important;
     }
 
     [data-testid="stChatInputButton"] svg {
@@ -157,7 +168,7 @@ st.markdown("""
     div[data-baseweb="select"] > div, div[data-testid="stSelectbox"] > div {
         background-color: #1e293b !important;
         color: #ffffff !important;
-        border: 1px solid #334155 !important;
+        border: 1px solid #475569 !important;
     }
 
     div[role="listbox"] {
@@ -253,37 +264,40 @@ with col1:
         selected_business = None
         st.error("📍 No businesses found.")
 
-# Fetch business description dynamically using RAG if not already loaded in session
-if selected_business and not st.session_state.business_description:
-    # 1. Check Global Router Cache First (Instant)
-    cached_context = agent_router.business_context_cache.get(selected_business)
-    
-    if cached_context:
-        st.session_state.business_description = cached_context
-    else:
-        # 2. Fallback to RAG if cache is cold (Slow, happens only once)
-        with st.spinner("✨ Loading business context..."):
-            try:
-                summary_query = "Give a very brief, one-sentence professional summary of what this business does."
-                res = process_query(
-                    selected_business, 
-                    summary_query, 
-                    st.session_state.chat_history,
-                    user_id=st.session_state.user_id
-                )
-                answer = res.get("answer", "Your AI support assistant • Ask anything")
-                st.session_state.business_description = answer
-                agent_router.set_business_context(selected_business, answer)
-            except Exception:
-                st.session_state.business_description = "Your AI support assistant • Ask anything"
-
 # ALWAYS Render the description in the second column if available
 with col2:
-    if selected_business and st.session_state.business_description:
-        st.markdown(f"""
-        <span class="biz-label">MISSION & SERVICES</span>
-        <div class="biz-desc">{st.session_state.business_description}</div>
-        """, unsafe_allow_html=True)
+    if selected_business:
+        # Fetch business description dynamically using RAG if not already loaded in session
+        if not st.session_state.business_description:
+            # 1. Check Global Router Cache First (Instant)
+            cached_context = agent_router.business_context_cache.get(selected_business)
+            
+            if cached_context:
+                st.session_state.business_description = cached_context
+            else:
+                # 2. Fallback to RAG if cache is cold (Slow, happens only once)
+                # Placing the spinner here ensures it appears in col2
+                with st.spinner("✨ Loading business context..."):
+                    try:
+                        summary_query = "Give a very brief, one-sentence professional summary of what this business does."
+                        res = process_query(
+                            selected_business, 
+                            summary_query, 
+                            st.session_state.chat_history,
+                            user_id=st.session_state.user_id
+                        )
+                        answer = res.get("answer", "Your AI support assistant • Ask anything")
+                        st.session_state.business_description = answer
+                        agent_router.set_business_context(selected_business, answer)
+                    except Exception:
+                        st.session_state.business_description = "Your AI support assistant • Ask anything"
+
+        # Now render the description if it's available
+        if st.session_state.business_description:
+            st.markdown(f"""
+            <span class="biz-label">MISSION & SERVICES</span>
+            <div class="biz-desc">{st.session_state.business_description}</div>
+            """, unsafe_allow_html=True)
 
 if selected_business:
     # --- SCROLLABLE RESPONSE AREA ---
