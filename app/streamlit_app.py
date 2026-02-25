@@ -125,6 +125,9 @@ st.markdown("""
         background-color: #1e293b !important;
         color: #ffffff !important;
         -webkit-text-fill-color: #ffffff !important;
+        --secondary-background-color: #1e293b !important;
+        --text-color: #ffffff !important;
+        --primary-color: #6366f1 !important;
     }
 
     /* Target the specific wrapper that often holds the background */
