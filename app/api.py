@@ -28,7 +28,8 @@ def process_query(business_id: str, user_query: str, chat_history: list = None, 
         
         return {
             "answer": final_state.get("answer", "I couldn't generate a response."),
-            "sources": final_state.get("sources", [])
+            "sources": final_state.get("sources", []),
+            "context": final_state.get("context", "")
         }
     except Exception as e:
         print(f"[ERROR] Graph execution failed: {e}")

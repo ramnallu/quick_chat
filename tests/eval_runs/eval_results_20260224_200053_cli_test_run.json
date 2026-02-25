@@ -1,0 +1,54 @@
+[
+  {
+    "case": 1,
+    "business_id": "Active Body Fitness",
+    "question": "Where is Active Body Fitness located?",
+    "ground_truth": "The facility is located at 659 Abbington Dr Suite 405, East Windsor, NJ 08520.",
+    "generated_answer": "Active Body Fitness is located in East Windsor, NJ.",
+    "evaluation": {
+      "accuracy_score": 3,
+      "faithfulness_score": 4,
+      "tone_score": 5,
+      "reasoning": "The generated answer is accurate in stating that Active Body Fitness is located in East Windsor, NJ. However, it lacks the specific address details provided in the ground truth. The tone of the response is professional and helpful."
+    }
+  },
+  {
+    "case": 2,
+    "business_id": "Active Body Fitness",
+    "question": "Can I access the gym at 3 AM?",
+    "ground_truth": "Yes, Active Body Fitness offers 24/7 gym access via secure phone door access.",
+    "generated_answer": "Yes, you can access the gym at 3 AM. The facility offers 24/7 access via a secure phone door system.",
+    "evaluation": {
+      "accuracy_score": 5,
+      "faithfulness_score": 5,
+      "tone_score": 5,
+      "reasoning": "The generated answer accurately reflects the information provided in the ground truth. It correctly states that Active Body Fitness offers 24/7 gym access via a secure phone door system, which directly answers the question about accessing the gym at 3 AM."
+    }
+  },
+  {
+    "case": 3,
+    "business_id": "Active Body Fitness",
+    "question": "What is the mission of Active Body Fitness?",
+    "ground_truth": "The mission is to help members use resistance training methods to increase strength and build lean muscle through core exercises like squats, planks, presses, and deadlifts.",
+    "generated_answer": "The mission of Active Body Fitness is to help members use resistance training methods to increase strength and build lean muscle with core exercises like squats, planks, presses, and deadlifts.",
+    "evaluation": {
+      "accuracy_score": 5,
+      "faithfulness_score": 5,
+      "tone_score": 5,
+      "reasoning": "The generated answer is accurate, faithful to the ground truth, and maintains a professional tone."
+    }
+  },
+  {
+    "case": 4,
+    "business_id": "Sawan Indian Cuisine",
+    "question": "Does the restaurant offer a lunch buffet?",
+    "ground_truth": "I need to check the Sawan Indian Cuisine documents for this specific detail.",
+    "generated_answer": "I'm sorry, but I don't know if Sawan Indian Cuisine offers a lunch buffet. The context provided does not mention any information about a buffet service.",
+    "evaluation": {
+      "accuracy_score": 2,
+      "faithfulness_score": 5,
+      "tone_score": 3,
+      "reasoning": "The generated answer is not accurate as it does not provide the correct information from the ground truth. However, it avoids hallucinating information not present in the context and maintains a professional tone."
+    }
+  }
+]

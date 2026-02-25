@@ -1,0 +1,58 @@
+[
+  {
+    "case": 1,
+    "business_id": "Active Body Fitness",
+    "question": "Where is Active Body Fitness located?",
+    "ground_truth": "Active Body Fitness is located at 659 Abbington Dr Suite 405, East Windsor, NJ 08520.",
+    "context_retrieved": "[Document 1]:\nActive Body Fitness is a premier, results-driven fitness community based in East Windsor, NJ. Founded in 2019, we specialize in helping busy adults, parents, and professionals transform their bodies and minds through high-energy group fitness, personalized coaching, and 24/7 gym access.\n\n---\n\n[Document 2]:\nActive Body Fitness offers a comprehensive range of fitness solutions designed to fit the busy lifestyles of our members.\n\n---\n\n[Document 3]:\nGet full access to our state-of-the-art facility whenever it fits your schedule.\n- Modern cardio and strength equipment.\n- Clean and well-maintained facilities.\n- Secure phone-based door access for late-night or early-morning workouts.\n\n---\n\n[Document 4]:\n- **Vision:** To create an active and fit community that incorporates professional coaching principles to help people have a healthy lifestyle, feel better, and look great.\n- **Mission:** To help members use resistance training methods to increase strength and build lean muscle with core exercises like squats, planks, presses, and deadlifts.",
+    "generated_answer": "Active Body Fitness is located in East Windsor, NJ.",
+    "evaluation": {
+      "accuracy_score": 3,
+      "faithfulness_score": 4,
+      "tone_score": 5,
+      "reasoning": "The generated answer is partially correct by providing the city and state, but it lacks the specific address which is present in the ground truth. The tone is professional and helpful."
+    }
+  },
+  {
+    "case": 2,
+    "business_id": "Active Body Fitness",
+    "question": "Can I access the gym at 3 AM?",
+    "ground_truth": "Yes, Active Body Fitness offers 24/7 gym access via secure phone door access.",
+    "context_retrieved": "[Document 1]:\n- **Gym Access:** 24/7 (via secure phone door access)\n- **Staffed Hours:** Monday - Friday, 5:00 AM - 10:00 PM\n\n---\n\n[Document 2]:\nGet full access to our state-of-the-art facility whenever it fits your schedule.\n- Modern cardio and strength equipment.\n- Clean and well-maintained facilities.\n- Secure phone-based door access for late-night or early-morning workouts.\n\n---\n\n[Document 3]:\nActive Body Fitness is a premier, results-driven fitness community based in East Windsor, NJ. Founded in 2019, we specialize in helping busy adults, parents, and professionals transform their bodies and minds through high-energy group fitness, personalized coaching, and 24/7 gym access.\n\n---\n\n[Document 4]:\n- **First Class FREE:** Try any group fitness class at no cost (new members only).\n- **Complimentary Consultation:** Free consultation for personal training.\n- **No Contracts:** Join without long-term commitments; cancel anytime with no fees.",
+    "generated_answer": "Yes, you can access the gym at 3 AM. Active Body Fitness offers 24/7 access via secure phone door access, allowing you to work out whenever it fits your schedule.",
+    "evaluation": {
+      "accuracy_score": 5,
+      "faithfulness_score": 5,
+      "tone_score": 4,
+      "reasoning": "The generated answer is accurate and faithful to the ground truth. It correctly states that Active Body Fitness offers 24/7 gym access via secure phone door access, which aligns with the information provided in the ground truth. The tone is professional and helpful, providing clear and concise information."
+    }
+  },
+  {
+    "case": 3,
+    "business_id": "Active Body Fitness",
+    "question": "What is the mission of Active Body Fitness?",
+    "ground_truth": "The mission of Active Body Fitness is to help members use resistance training methods to increase strength and build lean muscle through core exercises like squats, planks, presses, and deadlifts.",
+    "context_retrieved": "[Document 1]:\nActive Body Fitness offers a comprehensive range of fitness solutions designed to fit the busy lifestyles of our members.\n\n---\n\n[Document 2]:\nActive Body Fitness is a premier, results-driven fitness community based in East Windsor, NJ. Founded in 2019, we specialize in helping busy adults, parents, and professionals transform their bodies and minds through high-energy group fitness, personalized coaching, and 24/7 gym access.\n\n---\n\n[Document 3]:\n- **Vision:** To create an active and fit community that incorporates professional coaching principles to help people have a healthy lifestyle, feel better, and look great.\n- **Mission:** To help members use resistance training methods to increase strength and build lean muscle with core exercises like squats, planks, presses, and deadlifts.\n\n---\n\n[Document 4]:\nOur members achieve real results. Here are a few examples:\n\n- **Joe:** Lost 60 lbs in 8 months. \"It\u2019s the best part of my day.\"\n- **Dylan:** Lost 30 lbs in just 2 months through our structured group fitness program.\n- **Natasha:** Lost 40 lbs in 4 months and feels stronger and more confident than ever.",
+    "generated_answer": "The mission of Active Body Fitness is to help members use resistance training methods to increase strength and build lean muscle with core exercises like squats, planks, presses, and deadlifts.",
+    "evaluation": {
+      "accuracy_score": 5,
+      "faithfulness_score": 5,
+      "tone_score": 5,
+      "reasoning": "The generated answer is accurate, faithful to the ground truth, and maintains a professional tone."
+    }
+  },
+  {
+    "case": 4,
+    "business_id": "Sawan Indian Cuisine",
+    "question": "Does the restaurant offer a lunch buffet?",
+    "ground_truth": "Based on the available information, Sawan Indian Cuisine does not mention a lunch buffet. Their menu features a wide variety of starters, tiffins, main courses, and biryanis, but no buffet service is listed.",
+    "context_retrieved": "[Document 1]:\n- **Veg Noodles (Kids Portion)**: Stir-fried with mild vegetables - $11.99\n- **Chicken Noodles (Kids Portion)**: Stir-fried with chicken - $12.99\n- **Cheese Pizza Dosa**: Dosa baked with pizza sauce and cheese - $10.99\n- **Chocolate Dosa**: Crepe layered with dark chocolate - $9.99\n- **Chicken Nuggets**: Breaded and fried chicken bites - $8.99\n- **Loaded Cheese Fries**: French fries topped with melted cheese - $8.99\n\n---\n\n[Document 2]:\nSawan Indian Cuisine by Foodie Adda is an authentic Indian restaurant located in Englishtown, New Jersey.\n\n---\n\n[Document 3]:\n- **Address**: 336 US Highway 9, Englishtown, NJ 07726, United States\n- **Phone**: (732) 851-7878 / (302) 399-8448\n- **Website**: Official ordering available through Foodie Adda portal.\n\n---\n\n[Document 4]:\n- **Chicken Dum Biryani**: Slow-cooked Hyderabadi style - $17.99\n- **Mutton Dum Biryani**: Slow-cooked goat biryani - $19.99\n- **Paneer Biryani**: Spiced paneer and rice - $16.99\n- **Veg Fried Rice**: Wok-fried with assorted vegetables - $13.99",
+    "generated_answer": "I'm sorry, but I don't know if Sawan Indian Cuisine by Foodie Adda offers a lunch buffet. The context provided does not mention any information about a buffet service.",
+    "evaluation": {
+      "accuracy_score": 2,
+      "faithfulness_score": 3,
+      "tone_score": 4,
+      "reasoning": "The generated answer does not accurately reflect the ground truth, as it states that the restaurant offers a lunch buffet when in fact it does not. However, it avoids hallucinating information not present in the context and maintains a professional tone."
+    }
+  }
+]

@@ -80,7 +80,7 @@ class OperatorAgent:
 
             results = collection.query(
                 query_embeddings=[query_embedding],
-                n_results=4,
+                n_results=6,
                 include=["documents", "metadatas", "distances"]
             )
 

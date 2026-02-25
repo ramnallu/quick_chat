@@ -1,0 +1,58 @@
+[
+  {
+    "case": 1,
+    "business_id": "Active Body Fitness",
+    "question": "Where is Active Body Fitness located?",
+    "ground_truth": "Active Body Fitness is located at 659 Abbington Dr Suite 405, East Windsor, NJ 08520.",
+    "context_retrieved": "",
+    "generated_answer": "Active Body Fitness is located in East Windsor, NJ.",
+    "evaluation": {
+      "accuracy_score": 3,
+      "faithfulness_score": 4,
+      "tone_score": 5,
+      "reasoning": "The generated answer is partially correct by providing the city and state, but it lacks the specific address which is present in the ground truth. The tone is professional and helpful."
+    }
+  },
+  {
+    "case": 2,
+    "business_id": "Active Body Fitness",
+    "question": "Can I access the gym at 3 AM?",
+    "ground_truth": "Yes, Active Body Fitness offers 24/7 gym access via secure phone door access.",
+    "context_retrieved": "",
+    "generated_answer": "Yes, you can access the gym at 3 AM. The facility offers 24/7 access via secure phone door access, allowing members to enter whenever it suits their schedule.",
+    "evaluation": {
+      "accuracy_score": 5,
+      "faithfulness_score": 5,
+      "tone_score": 5,
+      "reasoning": "The generated answer accurately reflects the information provided in the ground truth. It correctly states that Active Body Fitness offers 24/7 gym access via secure phone door access, and it does so without adding any hallucinated or incorrect information."
+    }
+  },
+  {
+    "case": 3,
+    "business_id": "Active Body Fitness",
+    "question": "What is the mission of Active Body Fitness?",
+    "ground_truth": "The mission of Active Body Fitness is to help members use resistance training methods to increase strength and build lean muscle through core exercises like squats, planks, presses, and deadlifts.",
+    "context_retrieved": "",
+    "generated_answer": "The mission of Active Body Fitness is to help members use resistance training methods to increase strength and build lean muscle with core exercises like squats, planks, presses, and deadlifts.",
+    "evaluation": {
+      "accuracy_score": 5,
+      "faithfulness_score": 5,
+      "tone_score": 5,
+      "reasoning": "The generated answer is accurate, faithful to the ground truth, and maintains a professional tone."
+    }
+  },
+  {
+    "case": 4,
+    "business_id": "Sawan Indian Cuisine",
+    "question": "Does the restaurant offer a lunch buffet?",
+    "ground_truth": "Based on the available information, Sawan Indian Cuisine does not mention a lunch buffet. Their menu features a wide variety of starters, tiffins, main courses, and biryanis, but no buffet service is listed.",
+    "context_retrieved": "",
+    "generated_answer": "I'm sorry, but I don't know if Sawan Indian Cuisine by Foodie Adda offers a lunch buffet. The context provided does not mention any information about a lunch buffet service.",
+    "evaluation": {
+      "accuracy_score": 2,
+      "faithfulness_score": 3,
+      "tone_score": 4,
+      "reasoning": "The generated answer does not provide the correct information as per the ground truth. It states that the restaurant offers a lunch buffet, which is incorrect based on the ground truth. However, it avoids hallucinating information not present in the context and maintains a professional tone."
+    }
+  }
+]

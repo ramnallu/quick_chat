@@ -1,0 +1,96 @@
+[
+  {
+    "timestamp": "2026-02-24T19:55:19.821951",
+    "avg_accuracy": 3.75,
+    "avg_faithfulness": 4.25,
+    "num_cases": 4
+  },
+  {
+    "timestamp": "2026-02-24T20:00:53.543833",
+    "run_name": "cli_test_run",
+    "avg_accuracy": 3.75,
+    "avg_faithfulness": 4.75,
+    "num_cases": 4,
+    "details_file": "eval_results_20260224_200053_cli_test_run.json"
+  },
+  {
+    "timestamp": "2026-02-24T20:03:17.353408",
+    "run_name": "improved_v2",
+    "avg_accuracy": 3.75,
+    "avg_faithfulness": 4.25,
+    "num_cases": 4,
+    "details_file": "eval_results_20260224_200317_improved_v2.json"
+  },
+  {
+    "timestamp": "2026-02-24T20:04:33.312234",
+    "run_name": "debug",
+    "avg_accuracy": 3.75,
+    "avg_faithfulness": 4.25,
+    "num_cases": 4,
+    "details_file": "eval_results_20260224_200433_debug.json"
+  },
+  {
+    "timestamp": "2026-02-24T20:06:04.042756",
+    "run_name": "debug_v2",
+    "avg_accuracy": 3.75,
+    "avg_faithfulness": 4.25,
+    "num_cases": 4,
+    "details_file": "eval_results_20260224_200604_debug_v2.json"
+  },
+  {
+    "timestamp": "2026-02-24T20:09:54.522983",
+    "run_name": "fix_prepending_bizname_and_increased_k",
+    "avg_accuracy": 3.75,
+    "avg_faithfulness": 4.25,
+    "num_cases": 4,
+    "details_file": "eval_results_20260224_200954_fix_prepending_bizname_and_increased_k.json"
+  },
+  {
+    "timestamp": "2026-02-24T20:14:18.586994",
+    "run_name": "fix_ingestion_upsert_prefix_k6",
+    "avg_accuracy": 4.75,
+    "avg_faithfulness": 5.0,
+    "num_cases": 4,
+    "details_file": "eval_results_20260224_201418_fix_ingestion_upsert_prefix_k6.json"
+  },
+  {
+    "timestamp": "2026-02-24T20:30:10.118266",
+    "run_name": "chicken_test",
+    "avg_accuracy": 4.2,
+    "avg_faithfulness": 4.2,
+    "num_cases": 5,
+    "details_file": "eval_results_20260224_203010_chicken_test.json"
+  },
+  {
+    "timestamp": "2026-02-24T20:31:57.047070",
+    "run_name": "fix_chicken_hallucination",
+    "avg_accuracy": 4.0,
+    "avg_faithfulness": 4.2,
+    "num_cases": 5,
+    "details_file": "eval_results_20260224_203157_fix_chicken_hallucination.json"
+  },
+  {
+    "timestamp": "2026-02-24T20:33:45.200457",
+    "run_name": "fix_chicken_hallucination_v2",
+    "avg_accuracy": 4.2,
+    "avg_faithfulness": 4.6,
+    "num_cases": 5,
+    "details_file": "eval_results_20260224_203345_fix_chicken_hallucination_v2.json"
+  },
+  {
+    "timestamp": "2026-02-24T20:35:23.369654",
+    "run_name": "fix_chicken_hallucination_v3_completeness",
+    "avg_accuracy": 4.4,
+    "avg_faithfulness": 4.6,
+    "num_cases": 5,
+    "details_file": "eval_results_20260224_203523_fix_chicken_hallucination_v3_completeness.json"
+  },
+  {
+    "timestamp": "2026-02-24T20:36:50.432959",
+    "run_name": "final_extraction_fix_temp0",
+    "avg_accuracy": 4.4,
+    "avg_faithfulness": 4.6,
+    "num_cases": 5,
+    "details_file": "eval_results_20260224_203650_final_extraction_fix_temp0.json"
+  }
+]

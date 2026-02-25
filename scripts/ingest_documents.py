@@ -198,9 +198,11 @@ def ingest_folder(source_dir: Path, chroma_persist: Path, model_name: str, batch
             # Process all sections from this file
             for d in file_docs:
                 section_id = f"{business_id}::{p.name}::{d['section']}"
+                # Prepend business name to the text for better global context during retrieval
+                enhanced_text = f"Business: {business_id}\nSection: {d['section']}\nContent: {d['text']}"
                 to_index.append({
                     "id": section_id,
-                    "text": d["text"],
+                    "text": enhanced_text,
                     "metadata": {
                         "source": str(p),
                         "business_id": business_id,
@@ -233,8 +235,8 @@ def ingest_folder(source_dir: Path, chroma_persist: Path, model_name: str, batch
         except Exception:
             collection = client.create_collection(name=collection_name)
 
-        # add or update (Chroma's Python API uses add)
-        collection.add(ids=ids, documents=texts, metadatas=metadatas, embeddings=embeddings_list)
+        # upsert ensures we update existing documents if IDs match
+        collection.upsert(ids=ids, documents=texts, metadatas=metadatas, embeddings=embeddings_list)
         print(f"Upserted {len(ids)} vectors into {collection_name}")
 
     save_manifest(chroma_persist, manifest)

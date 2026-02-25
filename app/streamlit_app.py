@@ -132,8 +132,22 @@ st.markdown("""
     }
 
     textarea[data-testid="stChatInputTextArea"] {
-        color: #f8fafc !important;
+        color: #ffffff !important;
+        background-color: transparent !important;
         font-size: 15px !important;
+        caret-color: #6366f1 !important;
+    }
+
+    /* Fixed visibility for selectboxes and other standard inputs */
+    div[data-baseweb="select"] > div, div[data-testid="stSelectbox"] > div {
+        background-color: #1e293b !important;
+        color: #ffffff !important;
+        border: 1px solid #334155 !important;
+    }
+
+    div[role="listbox"] {
+        background-color: #1e293b !important;
+        color: #ffffff !important;
     }
 
     /* Buttons & Status Indicators */

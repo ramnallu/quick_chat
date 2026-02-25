@@ -1,0 +1,80 @@
+[
+  {
+    "case": 1,
+    "business_id": "Active Body Fitness",
+    "question": "Where is Active Body Fitness located?",
+    "ground_truth": "Active Body Fitness is located at 659 Abbington Dr Suite 405, East Windsor, NJ 08520.",
+    "context_retrieved": "[Document 1]:\nBusiness: active body fitness\nSection: Active Body Fitness\nContent: Active Body Fitness is a premier, results-driven fitness community based in East Windsor, NJ. Founded in 2019, we specialize in helping busy adults, parents, and professionals transform their bodies and minds through high-energy group fitness, personalized coaching, and 24/7 gym access.\n\n---\n\n[Document 2]:\nBusiness: active body fitness\nSection: Services & Programs\nContent: Active Body Fitness offers a comprehensive range of fitness solutions designed to fit the busy lifestyles of our members.\n\n---\n\n[Document 3]:\nBusiness: active body fitness\nSection: Contact Information\nContent: - **Address:** 659 Abbington Dr Suite 405, East Windsor, NJ 08520\n- **Phone:** (609) 619-0646 or (609) 371-3301\n- **Email:** team@activebfit.com\n- **Website:** https://www.activebfit.com/\n\n---\n\n[Document 4]:\nBusiness: active body fitness\nSection: 24/7 Gym Access\nContent: Get full access to our state-of-the-art facility whenever it fits your schedule.\n- Modern cardio and strength equipment.\n- Clean and well-maintained facilities.\n- Secure phone-based door access for late-night or early-morning workouts.\n\n---\n\n[Document 5]:\nBusiness: active body fitness\nSection: Operating Hours\nContent: - **Gym Access:** 24/7 (via secure phone door access)\n- **Staffed Hours:** Monday - Friday, 5:00 AM - 10:00 PM\n\n---\n\n[Document 6]:\nBusiness: active body fitness\nSection: Our Mission & Vision\nContent: - **Vision:** To create an active and fit community that incorporates professional coaching principles to help people have a healthy lifestyle, feel better, and look great.\n- **Mission:** To help members use resistance training methods to increase strength and build lean muscle with core exercises like squats, planks, presses, and deadlifts.",
+    "generated_answer": "Active Body Fitness is located at:\n\n659 Abbington Dr Suite 405, East Windsor, NJ 08520",
+    "evaluation": {
+      "accuracy_score": 5,
+      "faithfulness_score": 5,
+      "tone_score": 5,
+      "reasoning": "The generated answer is accurate, faithful to the ground truth, and maintains a professional tone."
+    }
+  },
+  {
+    "case": 2,
+    "business_id": "Active Body Fitness",
+    "question": "Can I access the gym at 3 AM?",
+    "ground_truth": "Yes, Active Body Fitness offers 24/7 gym access via secure phone door access.",
+    "context_retrieved": "[Document 1]:\nBusiness: active body fitness\nSection: Operating Hours\nContent: - **Gym Access:** 24/7 (via secure phone door access)\n- **Staffed Hours:** Monday - Friday, 5:00 AM - 10:00 PM\n\n---\n\n[Document 2]:\nBusiness: active body fitness\nSection: 24/7 Gym Access\nContent: Get full access to our state-of-the-art facility whenever it fits your schedule.\n- Modern cardio and strength equipment.\n- Clean and well-maintained facilities.\n- Secure phone-based door access for late-night or early-morning workouts.\n\n---\n\n[Document 3]:\nBusiness: active body fitness\nSection: Contact Information\nContent: - **Address:** 659 Abbington Dr Suite 405, East Windsor, NJ 08520\n- **Phone:** (609) 619-0646 or (609) 371-3301\n- **Email:** team@activebfit.com\n- **Website:** https://www.activebfit.com/\n\n---\n\n[Document 4]:\nBusiness: active body fitness\nSection: Offers & Membership\nContent: - **First Class FREE:** Try any group fitness class at no cost (new members only).\n- **Complimentary Consultation:** Free consultation for personal training.\n- **No Contracts:** Join without long-term commitments; cancel anytime with no fees.\n\n---\n\n[Document 5]:\nBusiness: active body fitness\nSection: Group Training Classes\nContent: Our high-energy group classes are the heart of our community. We offer over 40 classes per week led by expert coaches.\n- **Schedule:** Classes are Held Monday through Saturday.\n- **Class Types:** Over 30 different class types targeting various body areas and fitness goals.\n- **Levels:** Suitable for all levels, from beginners to experienced athletes. Movements are scaled to match your skill level.\n- **Group Size:** Small group training with a maximum of 16 people per class for personalized attention.\n\n---\n\n[Document 6]:\nBusiness: active body fitness\nSection: Active Body Fitness\nContent: Active Body Fitness is a premier, results-driven fitness community based in East Windsor, NJ. Founded in 2019, we specialize in helping busy adults, parents, and professionals transform their bodies and minds through high-energy group fitness, personalized coaching, and 24/7 gym access.",
+    "generated_answer": "Yes, you can access the **Gym Access** at 3 AM. You have full access to our state-of-the-art facility via secure phone-based door access for late-night or early-morning workouts.",
+    "evaluation": {
+      "accuracy_score": 5,
+      "faithfulness_score": 5,
+      "tone_score": 4,
+      "reasoning": "The generated answer is accurate and faithful to the ground truth. It correctly states that gym access is available at 3 AM and provides additional details about secure phone-based door access, which aligns with the information given in the ground truth. The tone is professional and helpful."
+    }
+  },
+  {
+    "case": 3,
+    "business_id": "Active Body Fitness",
+    "question": "What is the mission of Active Body Fitness?",
+    "ground_truth": "The mission of Active Body Fitness is to help members use resistance training methods to increase strength and build lean muscle through core exercises like squats, planks, presses, and deadlifts.",
+    "context_retrieved": "[Document 1]:\nBusiness: active body fitness\nSection: Our Mission & Vision\nContent: - **Vision:** To create an active and fit community that incorporates professional coaching principles to help people have a healthy lifestyle, feel better, and look great.\n- **Mission:** To help members use resistance training methods to increase strength and build lean muscle with core exercises like squats, planks, presses, and deadlifts.\n\n---\n\n[Document 2]:\nBusiness: active body fitness\nSection: Core Values\nContent: - **Earned, Not Given:** Results require work and focus.\n- **Discipline Over Motivation:** Consistency is key; we show up regardless of how we feel.\n- **No Excuses:** We take full responsibility for our actions and results.\n- **Elevate Others:** Strength is about lifting those around you.\n- **Be About Action:** We execute relentlessly on our goals.\n- **Be Curious:** We ask, learn, and level up with intention.\n\n---\n\n[Document 3]:\nBusiness: active body fitness\nSection: Active Body Fitness\nContent: Active Body Fitness is a premier, results-driven fitness community based in East Windsor, NJ. Founded in 2019, we specialize in helping busy adults, parents, and professionals transform their bodies and minds through high-energy group fitness, personalized coaching, and 24/7 gym access.\n\n---\n\n[Document 4]:\nBusiness: active body fitness\nSection: Services & Programs\nContent: Active Body Fitness offers a comprehensive range of fitness solutions designed to fit the busy lifestyles of our members.\n\n---\n\n[Document 5]:\nBusiness: active body fitness\nSection: Why We Are Different\nContent: - **Small Groups:** Max 16 people per class means you get the attention you deserve.\n- **Certified Coaches:** Expert guidance to ensure safety and effectiveness.\n- **Results-Driven:** Every workout has a purpose, and every goal is achievable.\n- **Supportive Community:** We celebrate every win together.\n\n---\n\n[Document 6]:\nBusiness: active body fitness\nSection: Offers & Membership\nContent: - **First Class FREE:** Try any group fitness class at no cost (new members only).\n- **Complimentary Consultation:** Free consultation for personal training.\n- **No Contracts:** Join without long-term commitments; cancel anytime with no fees.",
+    "generated_answer": "The mission of Active Body Fitness is to help members use resistance training methods to increase strength and build lean muscle with core exercises like squats, planks, presses, and deadlifts.",
+    "evaluation": {
+      "accuracy_score": 5,
+      "faithfulness_score": 5,
+      "tone_score": 5,
+      "reasoning": "The generated answer is accurate, faithful to the ground truth, and maintains a professional tone."
+    }
+  },
+  {
+    "case": 4,
+    "business_id": "Sawan Indian Cuisine",
+    "question": "Does the restaurant offer a lunch buffet?",
+    "ground_truth": "Based on the available information, Sawan Indian Cuisine does not mention a lunch buffet. Their menu features a wide variety of starters, tiffins, main courses, and biryanis, but no buffet service is listed.",
+    "context_retrieved": "[Document 1]:\nBusiness: sawan indian cuisine\nSection: Kids Menu\nContent: - **Veg Noodles (Kids Portion)**: Stir-fried with mild vegetables - $11.99\n- **Chicken Noodles (Kids Portion)**: Stir-fried with chicken - $12.99\n- **Cheese Pizza Dosa**: Dosa baked with pizza sauce and cheese - $10.99\n- **Chocolate Dosa**: Crepe layered with dark chocolate - $9.99\n- **Chicken Nuggets**: Breaded and fried chicken bites - $8.99\n- **Loaded Cheese Fries**: French fries topped with melted cheese - $8.99\n\n---\n\n[Document 2]:\nBusiness: sawan indian cuisine\nSection: Services & Amenities\nContent: - **Service Types**: Dine\u2011in, Carryout, Delivery.\n- **Atmosphere**: Spacious, family\u2011friendly, and welcoming.\n- **Accessibility**: Wheelchair accessible.\n- **Payments**: Accepts all major credit and debit cards.\n- **Parking**: Free parking available.\n\n---\n\n[Document 3]:\nBusiness: sawan indian cuisine\nSection: Sawan Indian Cuisine - General Information\nContent: Sawan Indian Cuisine by Foodie Adda is an authentic Indian restaurant located in Englishtown, New Jersey.\n\n---\n\n[Document 4]:\nBusiness: sawan indian cuisine\nSection: Biryanis & Rice\nContent: - **Chicken Dum Biryani**: Slow-cooked Hyderabadi style - $17.99\n- **Mutton Dum Biryani**: Slow-cooked goat biryani - $19.99\n- **Paneer Biryani**: Spiced paneer and rice - $16.99\n- **Veg Fried Rice**: Wok-fried with assorted vegetables - $13.99\n\n---\n\n[Document 5]:\nBusiness: sawan indian cuisine\nSection: Contact Information\nContent: - **Address**: 336 US Highway 9, Englishtown, NJ 07726, United States\n- **Phone**: (732) 851-7878 / (302) 399-8448\n- **Website**: Official ordering available through Foodie Adda portal.\n\n---\n\n[Document 6]:\nBusiness: sawan indian cuisine\nSection: Drinks & Desserts\nContent: - **Mango Lassi**: Creamy mango yogurt drink - $5.99\n- **Masala Chai**: Traditional spiced tea - $4.99\n- **South Indian Filter Coffee**: $4.99\n- **Gulab Jamun**: Fried dough balls in cardamom syrup - $6.99\n- **Rasmalai**: Cheese patties in sweet saffron milk - $6.99",
+    "generated_answer": "I don't know if Sawan Indian Cuisine offers a lunch buffet based on the information provided in the context documents. The documents do not mention any specific lunch buffet services. If you have more details or need further assistance, please let me know!",
+    "evaluation": {
+      "accuracy_score": 4,
+      "faithfulness_score": 5,
+      "tone_score": 3,
+      "reasoning": "The generated answer is accurate as it correctly states that the information provided does not mention a lunch buffet. It also avoids hallucinating any information not present in the context. However, the tone could be more professional and helpful by providing a clear statement instead of ending with a request for further assistance."
+    }
+  }
+]
+/* I have identified the root cause of the low accuracy and implemented a series of fixes that brought the Average Accuracy from 3.75 to 4.75 and Faithfulness to a perfect 5.0.
+
+🔍 Why was accuracy low initially?
+The main issue was Context Fragmentation. When we split business documents into small chunks (like the contact info section), those chunks sometimes lost their link to the business name, making them harder for the embedding model to find.
+
+Case 1 (Address): The model couldn't find the specific street address for "Active Body Fitness" because that chunk wasn't strongly associated with the business name in the vector space.
+Case 4 (Buffet): The model was too hesitant ("I don't know") when the information was missing, and the evaluator penalized this for not matching the ground truth "No buffet" definitive answer.
+🛠️ Fixes Implemented:
+Semantic Context Prepending: I updated the 
+ingest_documents.py
+ script to prepend "Business: [Name] | Section: [Title]" to every single text chunk before embedding it. This ensures that every piece of data is "branded" with its business identity, making retrieval much more accurate.
+Increased Retrieval Window: I bumped the context window from 4 to 6 documents in the 
+OperatorAgent
+, giving the AI more room to breathe and find specific details like full addresses.
+Instructional Precision: Modified the 
+ResponseGenerator
+ prompt to prioritize exact details (full addresses, hours, phone numbers) when they are found in the context.
+Traceability: Updated the evaluation runner to save the retrieved context alongside the answer in the JSON results, so you can see exactly what the AI was reading when it made a mistake.
+📊 Results of the latest run:
+Run Name: fix_ingestion_upsert_prefix_k6
+Avg Accuracy: 4.75 / 5.0 (🚀 +1.0)
+Avg Faithfulness: 5.0 / 5.0 (🚀 +0.75) */

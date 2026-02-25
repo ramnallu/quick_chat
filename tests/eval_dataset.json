@@ -1,0 +1,27 @@
+[
+    {
+        "business_id": "Active Body Fitness",
+        "question": "Where is Active Body Fitness located?",
+        "ground_truth": "Active Body Fitness is located at 659 Abbington Dr Suite 405, East Windsor, NJ 08520."
+    },
+    {
+        "business_id": "Active Body Fitness",
+        "question": "Can I access the gym at 3 AM?",
+        "ground_truth": "Yes, Active Body Fitness offers 24/7 gym access via secure phone door access."
+    },
+    {
+        "business_id": "Active Body Fitness",
+        "question": "What is the mission of Active Body Fitness?",
+        "ground_truth": "The mission of Active Body Fitness is to help members use resistance training methods to increase strength and build lean muscle through core exercises like squats, planks, presses, and deadlifts."
+    },
+    {
+        "business_id": "Sawan Indian Cuisine",
+        "question": "Does the restaurant offer a lunch buffet?",
+        "ground_truth": "Based on the available information, Sawan Indian Cuisine does not mention a lunch buffet. Their menu features a wide variety of starters, tiffins, main courses, and biryanis, but no buffet service is listed."
+    },
+    {
+        "business_id": "Sawan Indian Cuisine",
+        "question": "What are the chicken starters you serve?",
+        "ground_truth": "The chicken starters served at Sawan Indian Cuisine include: Andhra Style Chicken Vepudu ($16.99), Chicken 65 ($15.99), Chicken 555 ($16.99), Chicken Pakora ($15.99), Chilli Chicken / Chicken Manchurian ($15.99), and Karivepaku Chicken ($15.99). Goat and Shrimp items are not part of the chicken starter selection."
+    }
+]

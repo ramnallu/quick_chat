@@ -136,6 +136,14 @@ Verify your installation and RAG pipeline:
 python tests/smoke_test.py
 ```
 
+### 📊 6. Run Evaluations
+Measure the quality of your RAG responses using an LLM-as-a-judge:
+
+```bash
+python tests/eval_runner.py --name "baseline_run"
+```
+This script runs a set of test queries, compares them against ground truth, and scores them on **Accuracy**, **Faithfulness**, and **Tone**. Detailed results are saved in `tests/eval_runs/` and a summary history is kept in `tests/eval_history.json`.
+
 ---
 
 
