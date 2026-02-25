@@ -117,34 +117,34 @@ st.markdown("""
         box-shadow: 0 10px 15px -3px var(--primary-glow);
     }
 
-    /* Input area - Refined Dark Tray */
-    div[data-testid="stChatInput"] {
-        background: transparent !important;
-        padding-bottom: 30px !important;
+    /* --- ULTIMATE INPUT FIX --- */
+    /* Target the container and EVERY child inside it */
+    [data-testid="stChatInput"],
+    [data-testid="stChatInput"] div,
+    [data-testid="stChatInput"] textarea {
+        background-color: #1e293b !important;
+        color: #ffffff !important;
+        -webkit-text-fill-color: #ffffff !important;
     }
-    
-    /* The outer container of the input */
+
+    /* Target the specific wrapper that often holds the background */
     div[data-testid="stChatInput"] > div {
         background-color: #1e293b !important;
         border: 1px solid #334155 !important;
         border-radius: 24px !important;
-        padding: 4px 12px !important;
-        transition: all 0.3s ease;
     }
 
-    /* The actual textarea where the user types */
+    /* Final override for the textarea itself */
     textarea[data-testid="stChatInputTextArea"] {
-        color: #ffffff !important;
         background-color: transparent !important;
-        font-size: 15px !important;
+        color: #ffffff !important;
         caret-color: #6366f1 !important;
-        -webkit-text-fill-color: #ffffff !important; /* Force for Safari/Chrome */
     }
 
-    /* Placeholder Visibility */
+    /* Ensure placeholder is visible but muted */
     textarea[data-testid="stChatInputTextArea"]::placeholder {
-        color: rgba(255, 255, 255, 0.4) !important;
-        -webkit-text-fill-color: rgba(255, 255, 255, 0.4) !important;
+        color: rgba(255, 255, 255, 0.5) !important;
+        -webkit-text-fill-color: rgba(255, 255, 255, 0.5) !important;
     }
 
     /* Fixed visibility for selectboxes and other standard inputs */
