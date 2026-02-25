@@ -21,7 +21,8 @@ CHROMA_PERSIST = os.environ.get("CHROMA_PERSIST_PATH", "./data/chroma")
 st.set_page_config(
     page_title="QuickChat | AI Support",
     page_icon="🤖",
-    layout="wide"
+    layout="wide",
+    initial_sidebar_state="collapsed"
 )
 
 st.markdown("""
@@ -53,18 +54,20 @@ st.markdown("""
             radial-gradient(at 100% 0%, rgba(139, 92, 246, 0.1) 0, transparent 50%);
     }
 
-    /* Business Header - Glassmorphism Ribbon */
+    /* Business Header - Compact Glass Ribbon */
     .business-header {
-        padding: 40px 30px;
+        padding: 12px 20px;
         background: var(--card-bg);
-        backdrop-filter: blur(16px);
-        -webkit-backdrop-filter: blur(16px);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
         border: 1px solid var(--border-glass);
-        border-radius: 28px;
-        margin-bottom: 32px;
-        box-shadow: 0 20px 40px -15px rgba(0,0,0,0.5);
-        text-align: center;
-        animation: fadeInDown 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        border-radius: 16px;
+        margin-bottom: 12px;
+        box-shadow: 0 10px 20px -10px rgba(0,0,0,0.5);
+        text-align: left;
+        display: flex;
+        align-items: center;
+        gap: 15px;
     }
 
     @keyframes fadeInDown {
@@ -74,21 +77,25 @@ st.markdown("""
     
     .business-header h1 {
         margin: 0;
-        font-size: 34px;
-        font-weight: 800;
+        font-size: 20px;
+        font-weight: 700;
         background: linear-gradient(135deg, #ffffff 0%, #94a3b8 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
-        letter-spacing: -0.03em;
+        white-space: nowrap;
     }
     
     .business-header p {
-        margin: 14px auto 0;
-        font-size: 16px;
+        margin: 0;
+        font-size: 13px;
         font-weight: 400;
         color: #94a3b8;
-        max-width: 650px;
-        line-height: 1.6;
+        line-height: 1.2;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
     }
     
     /* Message Bubbles - Modern Chat UI */
@@ -225,12 +232,12 @@ if "user_id" not in st.session_state:
     st.session_state.user_id = str(uuid.uuid4())[:8]
 
 # Sidebar business selector
-st.sidebar.markdown("# 🤖 QuickChat")
+st.sidebar.markdown("### 🤖 QuickChat")
 if businesses:
     selected_business = st.sidebar.selectbox(
-        "Choose a Business",
+        "Business Account",
         options=businesses,
-        help="Select which business you want to chat with"
+        label_visibility="collapsed"
     )
     
     # Clear session if business changes
