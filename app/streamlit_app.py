@@ -34,8 +34,9 @@ st.markdown("""
     :root {
         --primary: #6366f1;
         --primary-glow: rgba(99, 102, 241, 0.4);
-        --bg-glass: rgba(255, 255, 255, 0.03);
-        --border-glass: rgba(255, 255, 255, 0.1);
+        --bg-glass: rgba(255, 255, 255, 0.1);
+        --bg-glass-bot: rgba(99, 102, 241, 0.15);
+        --border-glass: rgba(255, 255, 255, 0.15);
         --card-bg: rgba(30, 41, 59, 0.7);
         
         /* Streamlit Theme Overrides */
@@ -46,6 +47,8 @@ st.markdown("""
 
     html, body, [class*="css"] {
         font-family: 'Plus Jakarta Sans', sans-serif;
+        line-height: 1.6;
+        color: #ffffff !important;
     }
 
     /* Remove default Streamlit shadows and headers */
@@ -55,80 +58,109 @@ st.markdown("""
     .main { 
         background-color: #0f172a;
         background-image: 
-            radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.1) 0, transparent 50%), 
-            radial-gradient(at 100% 0%, rgba(139, 92, 246, 0.1) 0, transparent 50%);
+            radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0, transparent 50%), 
+            radial-gradient(at 100% 0%, rgba(139, 92, 246, 0.15) 0, transparent 50%);
     }
 
+    /* --- BRANDED TOP HEADER --- */
+    .top-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid var(--border-glass);
+        margin-bottom: 1rem;
+    }
+    .brand-container { display: flex; align-items: center; gap: 10px; }
+    .brand-logo { font-size: 18px; font-weight: 700; color: white !important; letter-spacing: -0.5px; }
+    .status-badge {
+        font-size: 9px;
+        background: rgba(34, 197, 94, 0.15);
+        color: #4ade80 !important;
+        padding: 3px 8px;
+        border-radius: 20px;
+        border: 1px solid rgba(34, 197, 94, 0.25);
+        display: flex; align-items: center; gap: 5px;
+    }
+    .status-dot { width: 5px; height: 5px; background: #4ade80; border-radius: 50%; box-shadow: 0 0 6px #4ade80; }
+
     .biz-label {
-        color: #818cf8 !important; /* Brighter Indigo */
-        font-size: 11px;
+        color: #a5b4fc !important; /* Lighter Indigo for visibility */
+        font-size: 10px;
         font-weight: 800;
         text-transform: uppercase;
-        letter-spacing: 0.15em;
-        margin-bottom: 6px;
+        letter-spacing: 0.2em;
+        margin-bottom: 8px;
         display: block;
     }
 
     .biz-desc {
-        color: #f1f5f9 !important;
-        -webkit-text-fill-color: #f1f5f9 !important;
-        font-size: 15px;
+        color: #f8fafc !important; /* Brighter White */
+        font-size: 14px;
         font-weight: 500;
-        line-height: 1.5;
+        line-height: 1.6;
     }
 
-    /* --- CLEAN FIXED LAYOUT --- */
-    /* Hide the global window scrollbar */
-    html, body, [data-testid="stAppViewContainer"] {
-        overflow: hidden !important;
-        background-color: #0f172a !important;
-    }
-
-    /* Target the sticky header row - simplified */
-    div[data-testid="stVerticalBlock"] > div:has(> [data-testid="stHorizontalBlock"]) {
-        background: #0f172a !important;
-        border: 1px solid #475569 !important;
-        border-radius: 12px !important;
-        padding: 10px 20px !important;
-        margin-bottom: 20px !important;
-    }
-
-    /* Unified Chat Board - Single Border for all messages */
-    div[data-testid="stVerticalBlockBorderWrapper"] {
-        background-color: #0f172a !important;
-        border: 1px solid #475569 !important;
-        border-radius: 15px !important;
-        padding: 10px !important;
-        margin-bottom: 10px !important;
+    /* --- MESSAGE BUBBLES --- */
+    div[data-testid="stChatMessageContent"] p {
+        color: #ffffff !important;
+        margin-bottom: 0 !important;
     }
 
     div[data-testid="stChatMessage"] {
         background-color: transparent !important;
         border: none !important;
-        padding-top: 5px !important;
-        padding-bottom: 5px !important;
+        padding: 0.5rem 0 !important;
+        margin: 0 !important;
     }
 
-    div[data-testid="stChatMessageContent"] {
-        background-color: transparent !important;
-        border: none !important;
-        color: #f1f5f9 !important;
-        padding: 5px 10px !important;
-        font-size: 15px;
+    /* Bubble logic via CSS selectors */
+    div[data-testid="stChatMessage"]:has(img[alt*="user"]) [data-testid="stChatMessageContent"] {
+        background: var(--bg-glass) !important;
+        border: 1px solid var(--border-glass) !important;
+        border-radius: 18px 18px 0 18px !important;
+        padding: 12px 20px !important;
+        color: #ffffff !important;
+    }
+    
+    div[data-testid="stChatMessage"]:has(svg), 
+    div[data-testid="stChatMessage"]:has(img[alt*="assistant"]) [data-testid="stChatMessageContent"] {
+        background: var(--bg-glass-bot) !important;
+        border: 1px solid rgba(99, 102, 241, 0.3) !important;
+        border-radius: 0 18px 18px 18px !important;
+        padding: 12px 20px !important;
+        color: #ffffff !important;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.2);
     }
 
-    /* Keep icons distinct but without bubbles */
-    div[data-testid="stChatMessage"] [data-testid="stChatMessageAvatar"] {
-        border-radius: 8px !important;
+    /* --- CLEAN FIXED LAYOUT --- */
+    html, body, [data-testid="stAppViewContainer"] {
+        overflow: hidden !important;
+        background-color: #0f172a !important;
     }
 
-    /* Custom Scrollbar ONLY for the internal container */
-    div[data-testid="stVerticalBlockBorderWrapper"] ::-webkit-scrollbar {
-        width: 6px !important;
+    /* Bottom Concierge Bar */
+    div[data-testid="stVerticalBlock"] > div:has(> [data-testid="stHorizontalBlock"]) {
+        background: rgba(30, 41, 59, 0.5) !important;
+        backdrop-filter: blur(16px);
+        border: 1px solid var(--border-glass) !important;
+        border-radius: 16px !important;
+        padding: 15px 25px !important;
+        margin-bottom: 5px !important;
+        box-shadow: 0 -8px 40px rgba(0,0,0,0.3);
     }
+
+    /* Custom Scrollbar */
+    div[data-testid="stVerticalBlockBorderWrapper"] ::-webkit-scrollbar { width: 4px !important; }
     div[data-testid="stVerticalBlockBorderWrapper"] ::-webkit-scrollbar-thumb {
-        background: #334155 !important;
+        background: rgba(255,255,255,0.2) !important;
         border-radius: 10px !important;
+    }
+
+    /* --- MOBILE RESPONSIVENESS --- */
+    @media (max-width: 768px) {
+        div[data-testid="stHorizontalBlock"] { flex-direction: column !important; gap: 15px !important; }
+        div[data-testid="stVerticalBlockBorderWrapper"] { height: 400px !important; }
     }
 
     /* --- ULTIMATE NO-WHITE BOTTOM FIX --- */
@@ -138,42 +170,24 @@ st.markdown("""
     [data-testid="stChatInput"] form,
     [data-testid="stChatInputTextArea"] {
         background-color: #0f172a !important;
-        background: #0f172a !important;
-        color: #ffffff !important;
         border: none !important;
     }
 
     [data-testid="stChatInput"] > div {
-        background-color: #0f172a !important;
-        border: 1px solid #475569 !important;
-        border-radius: 12px !important;
+        background-color: rgba(30, 41, 59, 0.6) !important;
+        border: 1px solid var(--border-glass) !important;
+        border-radius: 14px !important;
+        padding: 4px 12px !important;
     }
 
-    [data-testid="stChatInput"] textarea {
+    [data-testid="stChatInputTextArea"] textarea::placeholder {
+        color: #94a3b8 !important; /* Slate 400 */
+        -webkit-text-fill-color: #94a3b8 !important;
+    }
+
+    [data-testid="stChatInputTextArea"] textarea {
         color: #ffffff !important;
         -webkit-text-fill-color: #ffffff !important;
-    }
-
-    [data-testid="stChatInput"] textarea::placeholder {
-        color: #475569 !important;
-        -webkit-text-fill-color: #475569 !important;
-        opacity: 1 !important;
-    }
-
-    [data-testid="stChatInputButton"] svg {
-        fill: #6366f1 !important;
-    }
-
-    /* Fixed visibility for selectboxes and other standard inputs */
-    div[data-baseweb="select"] > div, div[data-testid="stSelectbox"] > div {
-        background-color: #1e293b !important;
-        color: #ffffff !important;
-        border: 1px solid #475569 !important;
-    }
-
-    div[role="listbox"] {
-        background-color: #1e293b !important;
-        color: #ffffff !important;
     }
 
     /* Buttons & Status Indicators */
@@ -188,6 +202,13 @@ st.markdown("""
     .stButton button:hover {
         transform: translateY(-2px);
         box-shadow: 0 8px 20px var(--primary-glow);
+    }
+
+    /* Fixed visibility for selectboxes */
+    div[data-baseweb="select"] > div {
+        background-color: #1e293b !important;
+        color: #ffffff !important;
+        border: 1px solid var(--border-glass) !important;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -236,20 +257,71 @@ if "is_generating" not in st.session_state:
 if "user_id" not in st.session_state:
     st.session_state.user_id = str(uuid.uuid4())[:8]
 
-# --- TOP NAVIGATION & BUSINESS SELECTION ---
+# --- RENDER TOP HEADER ---
+st.markdown("""
+<div class="top-header">
+    <div class="brand-container">
+        <div class="brand-logo">🤖 QuickChat</div>
+        <div class="status-badge">
+            <div class="status-dot"></div>
+            Concierge Active
+        </div>
+    </div>
+    <div style="font-size: 11px; color: #475569; font-weight: 500;">PREMIUM AI ASSISTANT</div>
+</div>
+""", unsafe_allow_html=True)
+
+# --- CHAT HISTORY CONTAINER ---
+# Render the scrollable area first
+with st.container(height=500):
+    # Render previous messages
+    for msg in st.session_state.chat_history:
+        with st.chat_message(msg.get("role", "assistant")):
+            st.markdown(msg.get("text", ""))
+
+    # --- CHAT PROCESSING LOOP ---
+    if st.session_state.is_generating and st.session_state.chat_history:
+        if st.session_state.chat_history[-1].get("role") == "user":
+            last_query = st.session_state.chat_history[-1].get("text", "")
+            # We need the selected business here, so we must calculate it or move it up
+            # For now, let's ensure we have a current_business in session_state
+            selected_business = st.session_state.current_business
+            if selected_business:
+                with st.chat_message("assistant"):
+                    with st.spinner("Thinking..."):
+                        try:
+                            response = process_query(
+                                selected_business, 
+                                last_query, 
+                                st.session_state.chat_history[:-1],
+                                user_id=st.session_state.user_id
+                            )
+                            answer = response.get("answer", "I couldn't generate a response.")
+                        except Exception as e:
+                            answer = f"Error: {str(e)}"
+                        
+                        if st.session_state.is_generating:
+                            st.markdown(answer)
+                            st.session_state.chat_history.append({"role": "assistant", "text": answer})
+                        
+                st.session_state.is_generating = False
+                st.rerun()
+
+# --- BOTTOM NAVIGATION & BUSINESS SELECTION ---
 with st.container():
-    st.markdown('<div id="sticky-header-anchor"></div>', unsafe_allow_html=True)
-    # We use columns to layout the selectbox and the description side-by-side
     col1, col2 = st.columns([1, 2.5])
 
 with col1:
     if businesses:
         st.markdown('<span class="biz-label">BUSINESS</span>', unsafe_allow_html=True)
+        # Handle initial selection if None
+        default_biz = st.session_state.current_business if st.session_state.current_business else businesses[0]
+        
         selected_business = st.selectbox(
             "Business",
             options=businesses,
             label_visibility="collapsed",
-            index=businesses.index(st.session_state.current_business) if st.session_state.current_business in businesses else 0
+            index=businesses.index(default_biz) if default_biz in businesses else 0
         )
             
         # Clear session if business changes
@@ -264,77 +336,37 @@ with col1:
         selected_business = None
         st.error("📍 No businesses found.")
 
-# ALWAYS Render the description in the second column if available
 with col2:
     if selected_business:
-        # Fetch business description dynamically using RAG if not already loaded in session
         if not st.session_state.business_description:
-            # 1. Check Global Router Cache First (Instant)
             cached_context = agent_router.business_context_cache.get(selected_business)
-            
             if cached_context:
                 st.session_state.business_description = cached_context
             else:
-                # 2. Fallback to RAG if cache is cold (Slow, happens only once)
-                # Placing the spinner here ensures it appears in col2
                 with st.spinner("✨ Loading business context..."):
                     try:
                         summary_query = "Give a very brief, one-sentence professional summary of what this business does."
                         res = process_query(
                             selected_business, 
                             summary_query, 
-                            st.session_state.chat_history,
+                            [], # Warmup query, no history needed
                             user_id=st.session_state.user_id
                         )
-                        answer = res.get("answer", "Your AI support assistant • Ask anything")
+                        answer = res.get("answer", "Your AI support assistant • Ask anything about the business")
                         st.session_state.business_description = answer
                         agent_router.set_business_context(selected_business, answer)
                     except Exception:
-                        st.session_state.business_description = "Your AI support assistant • Ask anything"
+                        st.session_state.business_description = "Your AI support assistant • Ask anything about the business"
 
-        # Now render the description if it's available
         if st.session_state.business_description:
             st.markdown(f"""
             <span class="biz-label">MISSION & SERVICES</span>
             <div class="biz-desc">{st.session_state.business_description}</div>
             """, unsafe_allow_html=True)
 
+# --- SINGLE CHAT INPUT (STAYS AT BOTTOM) ---
 if selected_business:
-    # --- SCROLLABLE RESPONSE AREA ---
-    # We use a container with a fixed height to provide its own scrollbar
-    with st.container(height=500):
-        # Render previous messages
-        for msg in st.session_state.chat_history:
-            with st.chat_message(msg.get("role", "assistant")):
-                st.markdown(msg.get("text", ""))
-
-        # --- CHAT PROCESSING LOOP ---
-        if st.session_state.is_generating and st.session_state.chat_history:
-            if st.session_state.chat_history[-1].get("role") == "user":
-                last_query = st.session_state.chat_history[-1].get("text", "")
-                with st.chat_message("assistant"):
-                    with st.spinner("Thinking..."):
-                        try:
-                            response = process_query(
-                                selected_business, 
-                                last_query, 
-                                st.session_state.chat_history[:-1],
-                                user_id=st.session_state.user_id
-                            )
-                            answer = response.get("answer", "I couldn't generate a response.")
-                        except Exception as e:
-                            answer = f"Error: {str(e)}"
-                        
-                        # Only append the response if the user hasn't stopped the generation
-                        if st.session_state.is_generating:
-                            st.markdown(answer)
-                            st.session_state.chat_history.append({"role": "assistant", "text": answer})
-                        
-                st.session_state.is_generating = False
-                st.rerun()
-
-    # --- SINGLE CHAT INPUT (STAYS AT BOTTOM) ---
-    prompt = st.chat_input("Ask anything", key="chat_input_unique")
+    prompt = st.chat_input("Ask anything about the business", key="chat_input_unique")
 
     if prompt:
         if st.session_state.is_generating:
@@ -345,8 +377,6 @@ if selected_business:
             st.rerun()
 
 # --- THE ABSOLUTE FIX: STOP BUTTON AT FOOTER ---
-# By placing this at the very end, it stays out of the chat history (no ghost boxes)
-# and we use fixed positioning to put it in the tray.
 if st.session_state.get("is_generating"):
     st.markdown("""
         <style>
