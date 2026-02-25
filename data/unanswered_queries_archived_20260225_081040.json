@@ -1,0 +1,20 @@
+[
+    {
+        "timestamp": "2026-02-25T07:54:00.894536",
+        "business_id": "Sawan Indian Cuisine",
+        "query": "what is masala?",
+        "reason": "llm_refusal"
+    },
+    {
+        "timestamp": "2026-02-25T07:56:23.460810",
+        "business_id": "Sawan Indian Cuisine",
+        "query": "what is Andhra?",
+        "reason": "llm_refusal"
+    },
+    {
+        "timestamp": "2026-02-25T07:57:35.297696",
+        "business_id": "White Tiger Martial Arts",
+        "query": "no sauturday class for saturday?",
+        "reason": "llm_refusal"
+    }
+]

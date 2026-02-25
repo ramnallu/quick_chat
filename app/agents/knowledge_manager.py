@@ -85,11 +85,13 @@ class KnowledgeManagerAgent:
             "### FAILED QUERIES ###\n"
             f"{queries_text}\n\n"
             "### TASK ###\n"
-            "Based on your general knowledge and the context of this business, generate clear, helpful FAQ-style "
-            "answers. If you are unsure, provide a professional generic placeholder but try to be as specific "
-            "to the business domain as possible.\n\n"
+            "Generate clear, helpful FAQ-style answers ONLY if you are highly confident based on the business domain. "
+            "CRITICAL: If the question asks for a specific service (like 'Lunch Buffet', 'Childcare', 'Valet Parking') "
+            "and it is NOT a standard common offering in this industry, EXPLICITLY state that the service is "
+            "currently not listed in our records to avoid false promises.\n\n"
             "### OUTPUT FORMAT ###\n"
             "Produce a valid JSON list of objects. Each object must have 'question' and 'suggested_answer'.\n"
+            "If you have no information for a query, set suggested_answer to 'Information not found in current records.'\n"
             "ONLY return the JSON list. No other text."
         )
 

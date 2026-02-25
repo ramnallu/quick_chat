@@ -102,8 +102,12 @@ st.markdown("""
     }
 
     /* --- MESSAGE BUBBLES --- */
-    div[data-testid="stChatMessageContent"] p {
+    /* Force all text inside chat messages to be white */
+    div[data-testid="stChatMessageContent"] * {
         color: #ffffff !important;
+    }
+    
+    div[data-testid="stChatMessageContent"] p {
         margin-bottom: 0 !important;
     }
 
@@ -180,14 +184,29 @@ st.markdown("""
         padding: 4px 12px !important;
     }
 
-    [data-testid="stChatInputTextArea"] textarea::placeholder {
-        color: #94a3b8 !important; /* Slate 400 */
-        -webkit-text-fill-color: #94a3b8 !important;
-    }
-
-    [data-testid="stChatInputTextArea"] textarea {
+    [data-testid="stChatInput"] textarea {
         color: #ffffff !important;
         -webkit-text-fill-color: #ffffff !important;
+        font-weight: 500 !important;
+        caret-color: #ffffff !important; /* Force cursor to be white */
+    }
+
+    [data-testid="stChatInput"] textarea::placeholder {
+        color: #94a3b8 !important;
+        -webkit-text-fill-color: #94a3b8 !important;
+        transition: color 0.2s ease;
+    }
+
+    /* Hide placeholder immediately on focus */
+    [data-testid="stChatInput"] textarea:focus::placeholder {
+        color: transparent !important;
+        -webkit-text-fill-color: transparent !important;
+    }
+
+    /* Target generic text colors within the tray but avoid breaking cursor */
+    [data-testid="stChatInput"] label, 
+    [data-testid="stChatInput"] p {
+        color: #ffffff !important;
     }
 
     /* Buttons & Status Indicators */
