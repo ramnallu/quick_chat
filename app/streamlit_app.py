@@ -22,7 +22,7 @@ st.set_page_config(
     page_title="QuickChat | AI Support",
     page_icon="🤖",
     layout="wide",
-    initial_sidebar_state="collapsed"
+    initial_sidebar_state="expanded"
 )
 
 st.markdown("""
@@ -37,7 +37,7 @@ st.markdown("""
         --bg-glass: rgba(255, 255, 255, 0.1);
         --bg-glass-bot: rgba(99, 102, 241, 0.15);
         --border-glass: rgba(255, 255, 255, 0.15);
-        --card-bg: rgba(30, 41, 59, 0.7);
+        --sidebar-bg: #1e293b;
         
         /* Streamlit Theme Overrides */
         --background-color: #0f172a !important;
@@ -60,6 +60,25 @@ st.markdown("""
         background-image: 
             radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0, transparent 50%), 
             radial-gradient(at 100% 0%, rgba(139, 92, 246, 0.15) 0, transparent 50%);
+    }
+
+    /* --- SIDEBAR STYLING --- */
+    section[data-testid="stSidebar"] {
+        background-color: #0f172a !important;
+        border-right: 1px solid var(--border-glass) !important;
+    }
+    
+    section[data-testid="stSidebar"] div.stVerticalBlock {
+        padding-top: 2rem !important;
+    }
+
+    .sidebar-card {
+        background: rgba(30, 41, 59, 0.6);
+        border: 1px solid var(--border-glass);
+        border-radius: 16px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
     }
 
     /* --- BRANDED TOP HEADER --- */
@@ -85,24 +104,24 @@ st.markdown("""
     .status-dot { width: 5px; height: 5px; background: #4ade80; border-radius: 50%; box-shadow: 0 0 6px #4ade80; }
 
     .biz-label {
-        color: #a5b4fc !important; /* Lighter Indigo for visibility */
+        color: #a5b4fc !important; /* Lighter Indigo */
         font-size: 10px;
         font-weight: 800;
         text-transform: uppercase;
         letter-spacing: 0.2em;
-        margin-bottom: 8px;
+        margin-bottom: 12px;
         display: block;
     }
 
     .biz-desc {
         color: #f8fafc !important; /* Brighter White */
-        font-size: 14px;
+        font-size: 13px;
         font-weight: 500;
         line-height: 1.6;
+        opacity: 0.9;
     }
 
     /* --- MESSAGE BUBBLES --- */
-    /* Force all text inside chat messages to be white */
     div[data-testid="stChatMessageContent"] * {
         color: #ffffff !important;
     }
@@ -118,13 +137,11 @@ st.markdown("""
         margin: 0 !important;
     }
 
-    /* Bubble logic via CSS selectors */
     div[data-testid="stChatMessage"]:has(img[alt*="user"]) [data-testid="stChatMessageContent"] {
         background: var(--bg-glass) !important;
         border: 1px solid var(--border-glass) !important;
         border-radius: 18px 18px 0 18px !important;
         padding: 12px 20px !important;
-        color: #ffffff !important;
     }
     
     div[data-testid="stChatMessage"]:has(svg), 
@@ -133,7 +150,6 @@ st.markdown("""
         border: 1px solid rgba(99, 102, 241, 0.3) !important;
         border-radius: 0 18px 18px 18px !important;
         padding: 12px 20px !important;
-        color: #ffffff !important;
         box-shadow: 0 4px 20px rgba(0,0,0,0.2);
     }
 
@@ -141,17 +157,6 @@ st.markdown("""
     html, body, [data-testid="stAppViewContainer"] {
         overflow: hidden !important;
         background-color: #0f172a !important;
-    }
-
-    /* Bottom Concierge Bar */
-    div[data-testid="stVerticalBlock"] > div:has(> [data-testid="stHorizontalBlock"]) {
-        background: rgba(30, 41, 59, 0.5) !important;
-        backdrop-filter: blur(16px);
-        border: 1px solid var(--border-glass) !important;
-        border-radius: 16px !important;
-        padding: 15px 25px !important;
-        margin-bottom: 5px !important;
-        box-shadow: 0 -8px 40px rgba(0,0,0,0.3);
     }
 
     /* Custom Scrollbar */
@@ -163,7 +168,6 @@ st.markdown("""
 
     /* --- MOBILE RESPONSIVENESS --- */
     @media (max-width: 768px) {
-        div[data-testid="stHorizontalBlock"] { flex-direction: column !important; gap: 15px !important; }
         div[data-testid="stVerticalBlockBorderWrapper"] { height: 400px !important; }
     }
 
@@ -188,25 +192,18 @@ st.markdown("""
         color: #ffffff !important;
         -webkit-text-fill-color: #ffffff !important;
         font-weight: 500 !important;
-        caret-color: #ffffff !important; /* Force cursor to be white */
+        caret-color: #ffffff !important;
     }
 
     [data-testid="stChatInput"] textarea::placeholder {
         color: #94a3b8 !important;
         -webkit-text-fill-color: #94a3b8 !important;
-        transition: color 0.2s ease;
     }
 
-    /* Hide placeholder immediately on focus */
+    /* Hide placeholder on focus */
     [data-testid="stChatInput"] textarea:focus::placeholder {
         color: transparent !important;
         -webkit-text-fill-color: transparent !important;
-    }
-
-    /* Target generic text colors within the tray but avoid breaking cursor */
-    [data-testid="stChatInput"] label, 
-    [data-testid="stChatInput"] p {
-        color: #ffffff !important;
     }
 
     /* Buttons & Status Indicators */
@@ -223,11 +220,27 @@ st.markdown("""
         box-shadow: 0 8px 20px var(--primary-glow);
     }
 
-    /* Fixed visibility for selectboxes */
-    div[data-baseweb="select"] > div {
-        background-color: #1e293b !important;
-        color: #ffffff !important;
-        border: 1px solid var(--border-glass) !important;
+    /* Prompt Bubbles styling */
+    .prompt-bubble {
+        background: rgba(99, 102, 241, 0.1) !important;
+        border: 1px solid rgba(99, 102, 241, 0.2) !important;
+        border-radius: 12px !important;
+        padding: 8px 12px !important;
+        cursor: pointer !important;
+        transition: all 0.2s ease !important;
+        font-size: 11px !important;
+        color: #a5b4fc !important;
+        margin-bottom: 8px !important;
+        text-align: left !important;
+        display: block !important;
+        width: 100% !important;
+    }
+
+    .prompt-bubble:hover {
+        background: rgba(99, 102, 241, 0.2) !important;
+        border-color: var(--primary) !important;
+        transform: translateX(4px) !important;
+        color: white !important;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -276,23 +289,95 @@ if "is_generating" not in st.session_state:
 if "user_id" not in st.session_state:
     st.session_state.user_id = str(uuid.uuid4())[:8]
 
-# --- RENDER TOP HEADER ---
-st.markdown("""
-<div class="top-header">
-    <div class="brand-container">
-        <div class="brand-logo">🤖 QuickChat</div>
-        <div class="status-badge">
-            <div class="status-dot"></div>
-            Concierge Active
+# --- SIDEBAR: BUSINESS SELECTION & MISSION ---
+with st.sidebar:
+    st.markdown('<div class="brand-logo" style="margin-bottom: 1rem;">🤖 QuickChat</div>', unsafe_allow_html=True)
+    
+    # Status Indicators in Sidebar
+    st.markdown("""
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; padding: 0 5px;">
+            <div class="status-badge">
+                <div class="status-dot"></div>
+                Concierge Active
+            </div>
+            <div style="font-size: 8px; color: #64748b; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em;">PREMIUM AI</div>
         </div>
-    </div>
-    <div style="font-size: 11px; color: #475569; font-weight: 500;">PREMIUM AI ASSISTANT</div>
-</div>
-""", unsafe_allow_html=True)
+    """, unsafe_allow_html=True)
+    
+    if businesses:
+        st.markdown('<span class="biz-label">ACTIVE BUSINESS</span>', unsafe_allow_html=True)
+        # Handle initial selection if None
+        default_biz = st.session_state.current_business if st.session_state.current_business else businesses[0]
+        
+        selected_business = st.selectbox(
+            "Business",
+            options=businesses,
+            label_visibility="collapsed",
+            index=businesses.index(default_biz) if default_biz in businesses else 0
+        )
+            
+        # Clear session if business changes
+        if selected_business != st.session_state.current_business:
+            st.session_state.chat_history = []
+            st.session_state.current_business = selected_business
+            st.session_state.msg_input = ""
+            st.session_state.business_description = ""
+            st.session_state.is_generating = False
+            st.rerun()
+    else:
+        selected_business = None
+        st.error("📍 No businesses found.")
+
+    if selected_business:
+        if not st.session_state.business_description:
+            cached_context = agent_router.business_context_cache.get(selected_business)
+            if cached_context:
+                st.session_state.business_description = cached_context
+            else:
+                with st.spinner("✨ Loading context..."):
+                    try:
+                        summary_query = "Give a very brief, one-sentence professional summary of what this business does."
+                        res = process_query(
+                            selected_business, 
+                            summary_query, 
+                            [], # Warmup query, no history needed
+                            user_id=st.session_state.user_id
+                        )
+                        answer = res.get("answer", "Your AI support assistant • Ask anything about the business")
+                        st.session_state.business_description = answer
+                        agent_router.set_business_context(selected_business, answer)
+                    except Exception:
+                        st.session_state.business_description = "Your AI support assistant • Ask anything about the business"
+
+        if st.session_state.business_description:
+            st.markdown(f"""
+            <div class="sidebar-card">
+                <span class="biz-label">OUR MISSION</span>
+                <div class="biz-desc">{st.session_state.business_description}</div>
+            </div>
+            """, unsafe_allow_html=True)
+            
+        # Generic Prompt Bubbles
+        st.markdown('<span class="biz-label">QUICK COMMANDS</span>', unsafe_allow_html=True)
+        
+        prompts = [
+            ("🕒 Business Hours", "What are your operational hours?"),
+            ("📍 Location & Directions", "Where is the business located?"),
+            ("✨ Services & Offerings", "What services or products do you offer?"),
+            ("📞 Contact Details", "How can I get in touch with you?")
+        ]
+        
+        for label, p_text in prompts:
+            if st.button(label, key=f"prompt_{label}", use_container_width=True):
+                st.session_state.is_generating = True
+                st.session_state.chat_history.append({"role": "user", "text": p_text})
+                st.rerun()
+
+# Main header removed to maximize chat space.
 
 # --- CHAT HISTORY CONTAINER ---
 # Render the scrollable area first
-with st.container(height=500):
+with st.container(height=650):
     # Render previous messages
     for msg in st.session_state.chat_history:
         with st.chat_message(msg.get("role", "assistant")):
@@ -326,62 +411,7 @@ with st.container(height=500):
                 st.session_state.is_generating = False
                 st.rerun()
 
-# --- BOTTOM NAVIGATION & BUSINESS SELECTION ---
-with st.container():
-    col1, col2 = st.columns([1, 2.5])
-
-with col1:
-    if businesses:
-        st.markdown('<span class="biz-label">BUSINESS</span>', unsafe_allow_html=True)
-        # Handle initial selection if None
-        default_biz = st.session_state.current_business if st.session_state.current_business else businesses[0]
-        
-        selected_business = st.selectbox(
-            "Business",
-            options=businesses,
-            label_visibility="collapsed",
-            index=businesses.index(default_biz) if default_biz in businesses else 0
-        )
-            
-        # Clear session if business changes
-        if selected_business != st.session_state.current_business:
-            st.session_state.chat_history = []
-            st.session_state.current_business = selected_business
-            st.session_state.msg_input = ""
-            st.session_state.business_description = ""
-            st.session_state.is_generating = False
-            st.rerun()
-    else:
-        selected_business = None
-        st.error("📍 No businesses found.")
-
-with col2:
-    if selected_business:
-        if not st.session_state.business_description:
-            cached_context = agent_router.business_context_cache.get(selected_business)
-            if cached_context:
-                st.session_state.business_description = cached_context
-            else:
-                with st.spinner("✨ Loading business context..."):
-                    try:
-                        summary_query = "Give a very brief, one-sentence professional summary of what this business does."
-                        res = process_query(
-                            selected_business, 
-                            summary_query, 
-                            [], # Warmup query, no history needed
-                            user_id=st.session_state.user_id
-                        )
-                        answer = res.get("answer", "Your AI support assistant • Ask anything about the business")
-                        st.session_state.business_description = answer
-                        agent_router.set_business_context(selected_business, answer)
-                    except Exception:
-                        st.session_state.business_description = "Your AI support assistant • Ask anything about the business"
-
-        if st.session_state.business_description:
-            st.markdown(f"""
-            <span class="biz-label">MISSION & SERVICES</span>
-            <div class="biz-desc">{st.session_state.business_description}</div>
-            """, unsafe_allow_html=True)
+# Redundant bottom nav removed.
 
 # --- SINGLE CHAT INPUT (STAYS AT BOTTOM) ---
 if selected_business:

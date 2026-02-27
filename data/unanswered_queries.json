@@ -1,0 +1,8 @@
+[
+    {
+        "timestamp": "2026-02-26T21:19:30.809439",
+        "business_id": "Sawan Indian Cuisine",
+        "query": "Does the restaurant offer a lunch buffet?",
+        "reason": "llm_refusal"
+    }
+]

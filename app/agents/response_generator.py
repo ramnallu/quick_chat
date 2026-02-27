@@ -21,9 +21,12 @@ class ResponseGenerator:
         """Synthesize a natural, conversational response."""
         from app.utils.logger import log_unanswered_query
         
+        # If no documents are found, we still proceed but note the lack of specific context 
+        # to allow the LLM to use its domain knowledge for relevant terms.
+        has_context = True
         if not raw_documents or not raw_documents.strip():
-            log_unanswered_query(business_id, query, reason="no_context_found")
-            return "I couldn't find information to answer that question. Could you rephrase or try another question?"
+            has_context = False
+            raw_documents = "[No specific records found in the business database for this query.]"
 
         if chat_history is None:
             chat_history = []
@@ -38,19 +41,37 @@ class ResponseGenerator:
         system_prompt = (
             "### INSTRUCTION ###\n"
             f"You are a professional Customer Support Assistant for the business: **{business_id}**.\n"
-            "Your MISSION is to provide 100% accurate information based ONLY on the provided context.\n\n"
+            "Your MISSION is to provide 100% accurate information based primarily on the provided context. "
+            "However, you ARE expected to use your domain expertise to explain terms, ingredients, "
+            "cultural references, or industry-standard concepts related to the business and its name, "
+            "even if they are not explicitly defined in the context.\n\n"
             "### CONTEXT TYPES ###\n"
             "1. [Glossary]: Authoritative definitions of business-specific terminology.\n"
             "2. [Learning Insights]: System-updated responses for previously missing information.\n"
             "3. [General Document/Section]: Standard business records.\n\n"
             "### RULES OF ENGAGEMENT ###\n"
-            "1. **STRICT DOMAIN BOUNDARY**: You are ONLY an expert for **{business_id}**. Refuse unrelated queries.\n"
-            "2. **CATEGORY PRECISION (CRITICAL)**: If asked for a specific category (e.g., 'chicken', 'vegan'), YOU MUST SCAN EVERY LINE. If an item in the context is NOT 'chicken' (like Goat, Lamb, or Shrimp), you MUST EXCLUDE it. Even if 'Goat Sukha' is in the same 'Appetizers' section as 'Chilli Chicken', only include 'Chilli Chicken'. Do NOT be helpful by providing unrelated items.\n"
-            "3. **NEGATIVE CHECK**: Before outputting an item, ask: 'Does this item explicitly contain the subject requested?'. If the user asked for 'Chicken', and the item is 'Shrimp Manchurian', DISCARD IT.\n"
-            "4. **NO INVERSE HALLUCINATION**: Never claim the business doesn't offer something (like Goat) if you just saw it in the context. If you previously made a mistake, simply apologize for the error without denying the item's existence.\n"
-            "5. **SOURCE OF TRUTH**: Use context ONLY. Use [Glossary] for terminology.\n"
+            "1. **DOMAIN EXPERTISE (IMPORTANT)**: You are an expert for **{business_id}** and its relevant industry. "
+            "Explain domain-related terms (e.g., 'Sawan', 'Masala', specific ingredients, cuisine types) "
+            "using your general knowledge if the context doesn't define them. Refuse queries completely "
+            "unrelated to this business domain (e.g., 'how to fix a car').\n"
+            "2. **CATEGORY PRECISION (CRITICAL)**: If asked for a specific category (e.g., 'chicken', 'vegan'), "
+            "YOU MUST SCAN EVERY LINE. If an item in the context is NOT 'chicken' (like Goat, Lamb, or Shrimp), "
+            "you MUST EXCLUDE it. Do NOT be helpful by providing unrelated items simply because they are in the "
+            "same menu section. **NO SECTION SPILLOVER**: Filter out anything that doesn't match the query perfectly.\n"
+            "3. **NEGATIVE CHECK**: Before outputting an item, ask: 'Is this item a [Requested Category] item?'. "
+            "If the user asked for 'Chicken', and the item reached is 'Goat Sukha' or 'Shrimp Pepper', DISCARD IT. "
+            "Including an extra item is a FAITHFULNESS FAILURE.\n"
+            "4. **NO INVERSE HALLUCINATION**: Never claim the business doesn't offer something if you just saw it in the context.\n"
+            "5. **BALANCED KNOWLEDGE**: Use context for all business-specific operations (hours, prices, policies). "
+            "Use your general knowledge to supplement the definition of terms or cultural aspects of the business name and its domain.\n"
             "6. **FORMAT**: Vertical numbered markdown lists. Double newlines between points. Bold product names.\n"
-            "7. **NO GUESSING**: If information is missing, say you don't know.\n\n"
+            "7. **NO OPERATIONAL HALLUCINATION**: If business-specific details (hours, prices, specific location, policies, "
+            "or availability of specific services like 'buffet') are missing from the context, YOU MUST EXPLICITLY "
+            "STATE that the information is not mentioned in the business records rather than just saying 'I don't know'. "
+            "For example: 'Based on our available menu and records, there is no mention of a lunch buffet.'\n\n"
+            "### FINAL VERIFICATION ###\n"
+            "Re-read your list. If the user asked for 'Chicken', and you listed 'Goat' or 'Lamb', REMOVE THEM NOW. "
+            "Accuracy is more important than a long list.\n\n"
             "### CONVERSATION HISTORY ###\n"
             f"{history_text}\n"
             "### CONTEXT FROM BUSINESS DOCUMENTS ###\n"
@@ -67,10 +88,14 @@ class ResponseGenerator:
             else:
                 answer = str(response).strip()
 
-            # Check if LLM explicitly said it doesn't know
-            refusal_keywords = ["don't know", "do not know", "not in the context", "no information", "cannot find", "sorry, i don't"]
+            # Handle refusals or "not found" carefully to maintain accuracy and helpfulness
+            refusal_keywords = ["don't know", "do not know", "not in the context", "no information", "cannot find", "sorry, i don't", "not found in current records"]
             if any(kw in answer.lower() for kw in refusal_keywords):
-                log_unanswered_query(business_id, query, reason="llm_refusal")
+                reason = "llm_refusal" if has_context else "no_context_found"
+                log_unanswered_query(business_id, query, reason=reason)
+                
+                # Format into a professional, conversational response if the LLM was too brief
+                return f"Based on our available business records for **{business_id}**, there is no specific mention of '{query}'. Our information currently focuses on our core menu, services, and policies, but that particular detail is not listed."
 
             return answer
 

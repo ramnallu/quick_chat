@@ -132,5 +132,45 @@
     "avg_faithfulness": 4.857,
     "num_cases": 7,
     "details_file": "eval_results_20260225_093159_hallucination_fix_and_andhra_v1.json"
+  },
+  {
+    "timestamp": "2026-02-26T21:05:59.684900",
+    "run_name": "domain_expertise_fix",
+    "avg_accuracy": 4.571,
+    "avg_faithfulness": 4.571,
+    "num_cases": 7,
+    "details_file": "eval_results_20260226_210559_domain_expertise_fix.json"
+  },
+  {
+    "timestamp": "2026-02-26T21:14:02.714072",
+    "run_name": "faithfulness_improvement_v1",
+    "avg_accuracy": 4.429,
+    "avg_faithfulness": 4.429,
+    "num_cases": 7,
+    "details_file": "eval_results_20260226_211402_faithfulness_improvement_v1.json"
+  },
+  {
+    "timestamp": "2026-02-26T21:15:47.731575",
+    "run_name": "faithfulness_improvement_v2",
+    "avg_accuracy": 4.0,
+    "avg_faithfulness": 4.857,
+    "num_cases": 7,
+    "details_file": "eval_results_20260226_211547_faithfulness_improvement_v2.json"
+  },
+  {
+    "timestamp": "2026-02-26T21:20:04.050864",
+    "run_name": "target_4.6_loop_v1",
+    "avg_accuracy": 4.0,
+    "avg_faithfulness": 4.857,
+    "num_cases": 7,
+    "details_file": "eval_results_20260226_212004_target_4.6_loop_v1.json"
+  },
+  {
+    "timestamp": "2026-02-26T21:22:47.896483",
+    "run_name": "target_4.6_loop_v3_final",
+    "avg_accuracy": 4.714,
+    "avg_faithfulness": 4.857,
+    "num_cases": 7,
+    "details_file": "eval_results_20260226_212247_target_4.6_loop_v3_final.json"
   }
 ]
