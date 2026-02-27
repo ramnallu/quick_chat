@@ -69,7 +69,35 @@ st.markdown("""
     }
     
     section[data-testid="stSidebar"] div.stVerticalBlock {
-        padding-top: 2rem !important;
+        padding-top: 3.5rem !important;
+    }
+
+    /* Aggressive styling for sidebar toggle buttons */
+    button[data-testid="stSidebarCollapse"] {
+        background-color: #6366f1 !important;
+        color: white !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        border-radius: 8px !important;
+        z-index: 100000 !important;
+        border: 1px solid rgba(255, 255, 255, 0.4) !important;
+        box-shadow: 0 0 15px rgba(99, 102, 241, 0.8) !important;
+    }
+
+    button[data-testid="stSidebarCollapse"] svg {
+        fill: white !important;
+        color: white !important;
+        transform: scale(1.2) !important;
+    }
+
+    button[data-testid="stSidebarCollapse"]:hover {
+        background-color: #4f46e5 !important;
+        transform: scale(1.05) !important;
+    }
+
+    /* Target the cache classes specifically as a fallback */
+    .st-emotion-cache-1aplgmp, .st-emotion-cache-6q9sum {
+        background-color: #6366f1 !important;
     }
 
     .sidebar-card {
@@ -153,9 +181,8 @@ st.markdown("""
         box-shadow: 0 4px 20px rgba(0,0,0,0.2);
     }
 
-    /* --- CLEAN FIXED LAYOUT --- */
+    /* --- CLEAN LAYOUT --- */
     html, body, [data-testid="stAppViewContainer"] {
-        overflow: hidden !important;
         background-color: #0f172a !important;
     }
 
