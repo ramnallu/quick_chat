@@ -1,18 +1,18 @@
 {
   "phone_numbers": {
     "+4058737830": {
-      "business_id": "sawan indian cuisine",
+      "business_id": "Sawan Indian Cuisine",
       "greeting": "Thank you for calling Sawan Indian Cuisine! How can I help you today?"
     },
     "+15551000002": {
-      "business_id": "active body fitness",
+      "business_id": "Active Body Fitness",
       "greeting": "Thank you for calling Active Body Fitness! How can I help you today?"
     },
     "+15551000003": {
-      "business_id": "white tiger martial arts",
+      "business_id": "White Tiger Martial Arts",
       "greeting": "Thank you for calling White Tiger Martial Arts! How can I help you today?"
     }
   },
   "default_greeting": "Thank you for calling! How can I help you today?",
-  "default_business_id": null
+  "default_business_id": "Sawan Indian Cuisine"
 }
