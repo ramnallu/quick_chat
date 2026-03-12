@@ -1,15 +1,19 @@
-# QuickChat — Unified Docker image
-# Runs Streamlit (port 7860) + FastAPI chat/voice server (port 8000)
+# QuickChat — Unified Docker image for Hugging Face Spaces
+# Single port 7860 serves everything via nginx reverse proxy:
+#   /chat, /incoming-call, /health, /voice-ws  →  FastAPI  (8000)
+#   everything else                             →  Streamlit (8501)
 FROM python:3.10-slim
 
 WORKDIR /app
 ENV PYTHONPATH=/app
 
-# System deps
+# System deps: build tools + nginx + supervisord
 RUN apt-get update && apt-get install -y \
     build-essential \
     curl \
     git \
+    nginx \
+    supervisor \
     && rm -rf /var/lib/apt/lists/*
 
 # Python deps (single requirements file)
@@ -19,14 +23,13 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Application code
 COPY . .
 
-# Ensure data and config dirs exist
-RUN mkdir -p data/chroma config
+# Ensure directories exist
+RUN mkdir -p data/chroma config /tmp/nginx
 
 # Make startup script executable
 RUN chmod +x start.sh
 
-# HF Spaces exposes port 7860 (Streamlit demo)
-# FastAPI runs on port 8000 (chat API + voice WebSocket)
-EXPOSE 7860 8000
+# HF Spaces exposes only port 7860 — nginx listens here
+EXPOSE 7860
 
 ENTRYPOINT ["./start.sh"]
