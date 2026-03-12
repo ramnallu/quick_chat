@@ -42,7 +42,7 @@ Single FastAPI server combining the chat REST API (for web widgets) and the Twil
 server.py                 # Unified FastAPI server
 voice_utils.py            # Voice response formatting
 config/phone_mapping.json # Phone number → business mapping
-requirements-server.txt   # Server dependencies
+requirements.txt          # All dependencies (core + server)
 test_chat_api.py          # Chat endpoint test
 test_voice_local.py       # Voice WebSocket test (no Twilio needed)
 README_SERVER.md          # This file
@@ -61,7 +61,7 @@ README_SERVER.md          # This file
 ### 1. Install dependencies
 
 ```bash
-pip install -r requirements-server.txt
+pip install -r requirements.txt
 ```
 
 ### 2. Configure phone number mapping
