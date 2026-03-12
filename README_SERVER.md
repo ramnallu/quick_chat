@@ -43,6 +43,10 @@ server.py                 # Unified FastAPI server
 voice_utils.py            # Voice response formatting
 config/phone_mapping.json # Phone number → business mapping
 requirements.txt          # All dependencies (core + server)
+start.sh                  # Docker/HF Spaces startup script
+Dockerfile                # Container build (HF Spaces compatible)
+.env.example              # Environment variable template
+scripts/deploy_hf_space.sh# HF Spaces deploy helper
 test_chat_api.py          # Chat endpoint test
 test_voice_local.py       # Voice WebSocket test (no Twilio needed)
 README_SERVER.md          # This file
@@ -164,7 +168,13 @@ Response:
 
 | Variable | Default | Description |
 |---|---|---|
+| `LLM_PROVIDER` | `ollama` | LLM backend: `ollama` (local) or `groq` (cloud) |
+| `GROQ_API_KEY` | — | Required when `LLM_PROVIDER=groq` |
+| `GROQ_MODEL` | `llama-3.3-70b-versatile` | Groq model name |
+| `OLLAMA_BASE_URL` | `http://localhost:11434` | Ollama server URL |
+| `OLLAMA_MODEL` | `llama3.2` | Ollama model name |
 | `CHROMA_PERSIST_PATH` | `./data/chroma` | Path to ChromaDB persistence directory |
+| `SERVER_PORT` | `8000` | FastAPI server port |
 | `VOICE_WS_HOST` | (from request Host header) | Public hostname for WebSocket URL in TwiML |
 | `PHONE_MAPPING_PATH` | `config/phone_mapping.json` | Path to phone mapping config |
 | `CR_VOICE` | `Google.en-US-Standard-J` | TTS voice for ConversationRelay |
@@ -172,3 +182,35 @@ Response:
 | `CR_TRANSCRIPTION_PROVIDER` | `deepgram` | STT provider |
 | `CR_SPEECH_MODEL` | `nova-3` | Deepgram speech model |
 | `CR_TTS_PROVIDER` | `google` | TTS provider |
+
+## Deploy to Hugging Face Spaces
+
+### 1. Set Space Secrets
+
+In your HF Space settings (Settings → Repository Secrets), add:
+
+| Secret | Value |
+|---|---|
+| `LLM_PROVIDER` | `groq` |
+| `GROQ_API_KEY` | `gsk_your_key_here` |
+
+### 2. Deploy
+
+```bash
+scripts/deploy_hf_space.sh <hf-username> <space-name>
+```
+
+This pushes the code to your HF Space, which triggers a Docker build. On startup:
+1. Documents are ingested into ChromaDB (if not already done)
+2. FastAPI server starts on port 8000 (chat API + voice WebSocket)
+3. Streamlit starts on port 7860 (HF Spaces' exposed port — the demo UI)
+
+### 3. What's accessible
+
+- **Streamlit demo**: `https://huggingface.co/spaces/<user>/<space>` (public)
+- **Chat API**: `POST /chat` on port 8000 (internal to container)
+- **Voice WebSocket**: `WS /voice-ws` on port 8000 (internal to container)
+
+> **Note**: HF Spaces only exposes port 7860. The FastAPI server on port 8000 is for
+> internal use within the container. For external API access with voice/chat endpoints,
+> deploy to a VPS or cloud platform (AWS, GCP, Railway, etc.).

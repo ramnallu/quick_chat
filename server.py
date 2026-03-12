@@ -7,7 +7,8 @@ Endpoints:
     GET  /health         – Health check
 
 Run:
-    uvicorn server:app --host 0.0.0.0 --port 8000
+    Local:  uvicorn server:app --host 0.0.0.0 --port 8000
+    HF:     Handled by start.sh (port 8000 behind Streamlit on 7860)
 """
 
 import asyncio
@@ -343,4 +344,5 @@ async def health():
 if __name__ == "__main__":
     import uvicorn
 
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    port = int(os.environ.get("SERVER_PORT", "8000"))
+    uvicorn.run(app, host="0.0.0.0", port=port)

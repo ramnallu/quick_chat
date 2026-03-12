@@ -1,33 +1,32 @@
-# Use an official Python runtime as a parent image
+# QuickChat — Unified Docker image
+# Runs Streamlit (port 7860) + FastAPI chat/voice server (port 8000)
 FROM python:3.10-slim
 
-# Set the working directory in the container
 WORKDIR /app
-
-# Set PYTHONPATH to ensure 'app' module is found
 ENV PYTHONPATH=/app
 
-# Install system dependencies (needed for some Python packages)
+# System deps
 RUN apt-get update && apt-get install -y \
     build-essential \
     curl \
     git \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy the requirements file into the container
+# Python deps (single requirements file)
 COPY requirements.txt .
-
-# Install any needed packages specified in requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the rest of the application code
+# Application code
 COPY . .
 
-# Create a data directory for ChromaDB (in case it doesn't exist)
-RUN mkdir -p data/chroma
+# Ensure data and config dirs exist
+RUN mkdir -p data/chroma config
 
-# Expose the port Streamlit runs on (Hugging Face Spaces use 7860)
-EXPOSE 7860
+# Make startup script executable
+RUN chmod +x start.sh
 
-# Check if chroma database exists, if not, ingest documents
-ENTRYPOINT ["sh", "-c", "if [ ! -d \"data/chroma\" ] || [ -z \"$(ls -A data/chroma)\" ]; then python scripts/ingest_documents.py --source-dir ./data --chroma-persist ./data/chroma; fi && streamlit run app/streamlit_app.py --server.port=7860 --server.address=0.0.0.0"]
+# HF Spaces exposes port 7860 (Streamlit demo)
+# FastAPI runs on port 8000 (chat API + voice WebSocket)
+EXPOSE 7860 8000
+
+ENTRYPOINT ["./start.sh"]
