@@ -48,11 +48,11 @@ VOICE_WS_HOST = os.environ.get("VOICE_WS_HOST", "")
 VOICE_WS_PATH = "/voice-ws"
 
 # ConversationRelay TTS / STT settings
-CR_VOICE = os.environ.get("CR_VOICE", "Google.en-US-Standard-J")
+CR_VOICE = os.environ.get("CR_VOICE", "UgBBYS2sOqTuMpoF3BR0")
 CR_LANGUAGE = os.environ.get("CR_LANGUAGE", "en-US")
 CR_TRANSCRIPTION_PROVIDER = os.environ.get("CR_TRANSCRIPTION_PROVIDER", "deepgram")
 CR_SPEECH_MODEL = os.environ.get("CR_SPEECH_MODEL", "nova-3")
-CR_TTS_PROVIDER = os.environ.get("CR_TTS_PROVIDER", "google")
+CR_TTS_PROVIDER = os.environ.get("CR_TTS_PROVIDER", "ElevenLabs")
 
 
 def _load_phone_mapping() -> dict:
