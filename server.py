@@ -8,7 +8,7 @@ Endpoints:
 
 Run:
     Local:  uvicorn server:app --host 0.0.0.0 --port 8000
-    HF:     Handled by start.sh (port 8000 behind Streamlit on 7860)
+    HF:     Handled by start.sh (port 8000 behind nginx on 7860)
 """
 
 import asyncio

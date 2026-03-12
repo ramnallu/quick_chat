@@ -46,6 +46,8 @@ requirements.txt          # All dependencies (core + server)
 start.sh                  # Docker/HF Spaces startup script
 Dockerfile                # Container build (HF Spaces compatible)
 .env.example              # Environment variable template
+config/nginx.conf         # Reverse proxy (port 7860 → FastAPI + Streamlit)
+config/supervisord.conf   # Process manager (nginx + FastAPI + Streamlit)
 scripts/deploy_hf_space.sh# HF Spaces deploy helper
 test_chat_api.py          # Chat endpoint test
 test_voice_local.py       # Voice WebSocket test (no Twilio needed)
@@ -202,15 +204,29 @@ scripts/deploy_hf_space.sh <hf-username> <space-name>
 
 This pushes the code to your HF Space, which triggers a Docker build. On startup:
 1. Documents are ingested into ChromaDB (if not already done)
-2. FastAPI server starts on port 8000 (chat API + voice WebSocket)
-3. Streamlit starts on port 7860 (HF Spaces' exposed port — the demo UI)
+2. nginx starts on port 7860 (HF's exposed port) as a reverse proxy
+3. FastAPI starts on port 8000 (chat API + voice WebSocket)
+4. Streamlit starts on port 8501 (demo UI)
 
-### 3. What's accessible
+### 3. How Routing Works
 
-- **Streamlit demo**: `https://huggingface.co/spaces/<user>/<space>` (public)
-- **Chat API**: `POST /chat` on port 8000 (internal to container)
-- **Voice WebSocket**: `WS /voice-ws` on port 8000 (internal to container)
+nginx on port 7860 routes requests:
 
-> **Note**: HF Spaces only exposes port 7860. The FastAPI server on port 8000 is for
-> internal use within the container. For external API access with voice/chat endpoints,
-> deploy to a VPS or cloud platform (AWS, GCP, Railway, etc.).
+| Path | Routed to | Service |
+|---|---|---|
+| `/chat` | `localhost:8000` | FastAPI chat API |
+| `/incoming-call` | `localhost:8000` | Twilio voice webhook |
+| `/voice-ws` | `localhost:8000` | Voice WebSocket |
+| `/health` | `localhost:8000` | Health check |
+| Everything else | `localhost:8501` | Streamlit demo UI |
+
+### 4. What's Accessible
+
+All endpoints are available through the HF Space's public URL:
+
+- **Streamlit demo**: `https://<user>-<space>.hf.space/`
+- **Chat API**: `POST https://<user>-<space>.hf.space/chat`
+- **Voice WebSocket**: `WSS https://<user>-<space>.hf.space/voice-ws`
+- **Health check**: `GET https://<user>-<space>.hf.space/health`
+
+For Twilio, set the voice webhook to: `https://<user>-<space>.hf.space/incoming-call`
