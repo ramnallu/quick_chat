@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """Local test client that simulates Twilio ConversationRelay WebSocket messages.
 
-Connects to the voice_server WebSocket, sends a setup message followed by
+Connects to the server WebSocket, sends a setup message followed by
 one or more prompt messages, and prints every response from the server.
 
 Usage:
-    # 1. Start the voice server
-    #    uvicorn voice_server:app --host 0.0.0.0 --port 8765
+    # 1. Start the unified server
+    #    uvicorn server:app --host 0.0.0.0 --port 8000
     #
     # 2. Run this test
     #    python test_voice_local.py
@@ -23,7 +23,7 @@ try:
 except ImportError:
     sys.exit("Missing dependency: pip install websockets")
 
-WS_URL = "ws://localhost:8765/voice-ws"
+WS_URL = "ws://localhost:8000/voice-ws"
 
 # Simulated ConversationRelay messages
 SETUP_MESSAGE = {
