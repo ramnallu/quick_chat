@@ -1,0 +1,19 @@
+{
+    "_comment": "Maps Retell phone numbers to QuickChat business IDs. The business_id must match the name used in ChromaDB collections (e.g., 'Sawan Indian Cuisine' -> collection 'business__sawan_indian_cuisine').",
+    "phone_numbers": {
+        "+11234567890": {
+            "business_id": "Active Body Fitness",
+            "greeting": "Thank you for calling Active Body Fitness! How can I help you today?"
+        },
+        "+10987654321": {
+            "business_id": "Sawan Indian Cuisine",
+            "greeting": "Thank you for calling Sawan Indian Cuisine! How can I help you today?"
+        },
+        "+11122334455": {
+            "business_id": "White Tiger Martial Arts",
+            "greeting": "Thank you for calling White Tiger Martial Arts! How can I help you today?"
+        }
+    },
+    "default_greeting": "Thank you for calling! How can I help you today?",
+    "default_business_id": null
+}
