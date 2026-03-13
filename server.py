@@ -317,7 +317,7 @@ async def _handle_prompt(session: VoiceSession, msg: dict) -> None:
         )
 
         answer = result.get("answer", "I'm sorry, I couldn't find an answer to that.")
-        voice_answer = format_for_voice(answer)
+        voice_answer = format_for_voice(answer, question=user_text)
 
         session.chat_history.append({"role": "user", "content": user_text})
         session.chat_history.append({"role": "assistant", "content": voice_answer})
