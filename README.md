@@ -186,7 +186,7 @@ Configure the system via environment variables or a `.env` file:
 ---
 
 ## 👤 Author
-**Ram Pradeep Nalluri** - *Data Engineer & AI Engineer | Agent Enthusiast*
+**Ram Pradeep Nalluri** - *Data Engineer & AI Engineer
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Profile-blue?style=flat&logo=linkedin)](https://www.linkedin.com/in/ramnalluri/)
 
