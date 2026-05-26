@@ -131,6 +131,25 @@ pip install -r requirements.txt
 ```
 
 ### 3. Ingest Data
+
+---
+
+
+## ⚙️ Configuration
+
+Configure the system via environment variables or a `.env` file:
+
+export PYTHONPATH=$(pwd)
+
+| Variable | Description | Default |
+| :--- | :--- | :--- |
+| `LLM_PROVIDER` | Choose `ollama` or `groq` | `ollama` |
+| `GROQ_API_KEY` | Required if using Groq | - |
+| `OLLAMA_MODEL` | Local model name | `qwen2.5-coder:7b` |
+| `CHROMA_PERSIST_PATH` | Path to vector database | `./data/chroma` |
+
+----
+
 Place your business documents in `data/` (organized by folders) and run:
 
 ```bash
@@ -169,19 +188,6 @@ python scripts/tune_knowledge.py
 ```
 This script uses the **Teacher Agent** to analyze gaps and inject new "Learning Insights" back into the vector database.
 
----
-
-
-## ⚙️ Configuration
-
-Configure the system via environment variables or a `.env` file:
-
-| Variable | Description | Default |
-| :--- | :--- | :--- |
-| `LLM_PROVIDER` | Choose `ollama` or `groq` | `ollama` |
-| `GROQ_API_KEY` | Required if using Groq | - |
-| `OLLAMA_MODEL` | Local model name | `qwen2.5-coder:7b` |
-| `CHROMA_PERSIST_PATH` | Path to vector database | `./data/chroma` |
 
 ---
 
